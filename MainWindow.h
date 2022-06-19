@@ -18,6 +18,7 @@
 #include "FinTechUI/DragTabWidget/DragTabWidget.hpp"
 #include "HPPackClient.h"
 #include "Widget/PermissionWidget.h"
+#include "Widget/MarketWidget.h"
 
 class MainWindow : public QWidget
 {
@@ -33,6 +34,7 @@ private:
     QVBoxLayout* m_Layout;
     FinTechUI::DragTabWidget* m_TabWidget;
     PermissionWidget* m_PermissionWidget;
+    MarketWidget* m_MarketWidget;
 
     Utils::XMonitorConfig m_XMonitorConfig;
     QString m_UserName;

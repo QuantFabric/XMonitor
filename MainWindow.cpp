@@ -40,6 +40,24 @@ void MainWindow::LoadPlugins()
     {
         m_TabWidget->addTabPage(m_PermissionWidget, PLUGIN_PERMISSION);
     }
+
+    if(m_Plugins.contains(PLUGIN_MARKET))
+    {
+        m_MarketWidget = new MarketWidget();
+        m_TabWidget->addTabPage(m_MarketWidget, PLUGIN_MARKET);
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedFutureData(const QList<Message::PackMessage>&)),
+            m_MarketWidget,
+            SLOT(OnReceivedFutureData(const QList<Message::PackMessage>&)));
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedSpotData(const QList<Message::PackMessage>&)),
+            m_MarketWidget,
+            SLOT(OnReceivedSpotData(const QList<Message::PackMessage>&)));
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedStockData(const QList<Message::PackMessage>&)),
+            m_MarketWidget,
+            SLOT(OnReceivedStockData(const QList<Message::PackMessage>&)));
+    }
 }
 
 void MainWindow::OnReceivedLoginResponse(const Message::PackMessage& msg)

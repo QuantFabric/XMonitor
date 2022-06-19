@@ -1,6 +1,6 @@
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
@@ -24,6 +24,8 @@ SOURCES += \
     HPPackClient.cpp \
     $$CurrentProjectPath/../Utils/Logger.cpp \
     Widget/PermissionWidget.cpp \
+    FinTechUI/QCustomPlot/qcustomplot.cpp \
+    Widget/MarketWidget.cpp \
 
 HEADERS += \
     FinTechUI/DragTabWidget/DragTabBar.hpp \
@@ -41,11 +43,13 @@ HEADERS += \
     FinTechUI/Model/YButtonDelegate.hpp \
     FinTechUI/Model/XProgressDelegate.hpp \
     FinTechUI/FilterWidget.hpp \
+    FinTechUI/QCustomPlot/qcustomplot.h \
     MainWindow.h \
     PackMessage.hpp \
     HPPackClient.h \
     Logger.h \
     Widget/PermissionWidget.h \
+    Widget/MarketWidget.h \
 
 
 win32 {
@@ -58,4 +62,4 @@ else {
 }
 
 TEMPLATE = app
-TARGET = XMonitor_0.2.0
+TARGET = XMonitor_0.3.0
