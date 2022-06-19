@@ -68,6 +68,20 @@ void MainWindow::LoadPlugins()
             m_EventLogWidget,
             SLOT(OnReceivedEventLog(const QList<Message::PackMessage>&)));
     }
+
+    if(m_Plugins.contains(PLUGIN_RISKJUDGE))
+    {
+        m_RiskJudgeWidget = new RiskJudgeWidget();
+        m_TabWidget->addTabPage(m_RiskJudgeWidget, PLUGIN_RISKJUDGE);
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedRiskReport(const QList<Message::PackMessage>&)),
+            m_RiskJudgeWidget,
+            SLOT(OnReceivedRiskReport(const QList<Message::PackMessage>&)));
+        connect(m_HPPackClient,
+            SIGNAL(UpdateRiskIDAccounts(const QMap<QString, QStringList>&)),
+            m_RiskJudgeWidget,
+            SIGNAL(UpdateRiskIDAccounts(const QMap<QString, QStringList>&)));
+    }
 }
 
 void MainWindow::OnReceivedLoginResponse(const Message::PackMessage& msg)

@@ -20,6 +20,7 @@
 #include "Widget/PermissionWidget.h"
 #include "Widget/MarketWidget.h"
 #include "Widget/EventLogWidget.h"
+#include "Widget/RiskJudgeWidget.h"
 
 class MainWindow : public QWidget
 {
@@ -37,6 +38,7 @@ private:
     PermissionWidget* m_PermissionWidget;
     MarketWidget* m_MarketWidget;
     EventLogWidget* m_EventLogWidget;
+    RiskJudgeWidget* m_RiskJudgeWidget;
 
     Utils::XMonitorConfig m_XMonitorConfig;
     QString m_UserName;
