@@ -23,16 +23,29 @@ SOURCES += \
     MainWindow.cpp \
     HPPackClient.cpp \
     $$CurrentProjectPath/../Utils/Logger.cpp \
+    Widget/PermissionWidget.cpp \
 
 HEADERS += \
     FinTechUI/DragTabWidget/DragTabBar.hpp \
     FinTechUI/DragTabWidget/DragTabWidget.hpp \
     FinTechUI/DragTabWidget/TabDialog.hpp \
     FinTechUI/DragTabWidget/TabPageWidget.hpp \
+    FinTechUI/Model/XHeaderView.hpp \
+    FinTechUI/Model/YHeaderView.hpp \
+    FinTechUI/Model/XTableModel.hpp \
+    FinTechUI/Model/XTableModelItem.hpp \
+    FinTechUI/Model/FrozenTableView.hpp \
+    FinTechUI/Model/XSortFilterProxyModel.hpp \
+    FinTechUI/Model/XPersistentItemDelegate.hpp \
+    FinTechUI/Model/XButtonDelegate.hpp \
+    FinTechUI/Model/YButtonDelegate.hpp \
+    FinTechUI/Model/XProgressDelegate.hpp \
+    FinTechUI/FilterWidget.hpp \
     MainWindow.h \
     PackMessage.hpp \
     HPPackClient.h \
     Logger.h \
+    Widget/PermissionWidget.h \
 
 
 win32 {
@@ -45,4 +58,4 @@ else {
 }
 
 TEMPLATE = app
-TARGET = XMonitor_0.1.0
+TARGET = XMonitor_0.2.0

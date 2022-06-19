@@ -15,9 +15,9 @@
 #include "PackMessage.hpp"
 #include "YMLConfig.hpp"
 #include "Logger.h"
-
 #include "FinTechUI/DragTabWidget/DragTabWidget.hpp"
 #include "HPPackClient.h"
+#include "Widget/PermissionWidget.h"
 
 class MainWindow : public QWidget
 {
@@ -32,6 +32,7 @@ protected slots:
 private:
     QVBoxLayout* m_Layout;
     FinTechUI::DragTabWidget* m_TabWidget;
+    PermissionWidget* m_PermissionWidget;
 
     Utils::XMonitorConfig m_XMonitorConfig;
     QString m_UserName;
