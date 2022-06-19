@@ -19,6 +19,7 @@
 #include "HPPackClient.h"
 #include "Widget/PermissionWidget.h"
 #include "Widget/MarketWidget.h"
+#include "Widget/EventLogWidget.h"
 
 class MainWindow : public QWidget
 {
@@ -35,6 +36,7 @@ private:
     FinTechUI::DragTabWidget* m_TabWidget;
     PermissionWidget* m_PermissionWidget;
     MarketWidget* m_MarketWidget;
+    EventLogWidget* m_EventLogWidget;
 
     Utils::XMonitorConfig m_XMonitorConfig;
     QString m_UserName;

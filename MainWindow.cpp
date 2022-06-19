@@ -58,6 +58,16 @@ void MainWindow::LoadPlugins()
             m_MarketWidget,
             SLOT(OnReceivedStockData(const QList<Message::PackMessage>&)));
     }
+
+    if(m_Plugins.contains(PLUGIN_EVENTLOG))
+    {
+        m_EventLogWidget = new EventLogWidget();
+        m_TabWidget->addTabPage(m_EventLogWidget, PLUGIN_EVENTLOG);
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedEventLog(const QList<Message::PackMessage>&)),
+            m_EventLogWidget,
+            SLOT(OnReceivedEventLog(const QList<Message::PackMessage>&)));
+    }
 }
 
 void MainWindow::OnReceivedLoginResponse(const Message::PackMessage& msg)

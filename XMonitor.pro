@@ -26,6 +26,7 @@ SOURCES += \
     Widget/PermissionWidget.cpp \
     FinTechUI/QCustomPlot/qcustomplot.cpp \
     Widget/MarketWidget.cpp \
+    Widget/EventLogWidget.cpp \
 
 HEADERS += \
     FinTechUI/DragTabWidget/DragTabBar.hpp \
@@ -50,6 +51,7 @@ HEADERS += \
     Logger.h \
     Widget/PermissionWidget.h \
     Widget/MarketWidget.h \
+    Widget/EventLogWidget.h \
 
 
 win32 {
@@ -62,4 +64,4 @@ else {
 }
 
 TEMPLATE = app
-TARGET = XMonitor_0.3.0
+TARGET = XMonitor_0.4.0
