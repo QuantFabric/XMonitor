@@ -2,3 +2,6 @@
 /build
 *.pro.user*
 /.history
+/log
+Makefile
+*.o

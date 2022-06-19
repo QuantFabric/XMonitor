@@ -82,6 +82,16 @@ void MainWindow::LoadPlugins()
             m_RiskJudgeWidget,
             SIGNAL(UpdateRiskIDAccounts(const QMap<QString, QStringList>&)));
     }
+
+    if(m_Plugins.contains(PLUGIN_MONITOR))
+    {
+        m_MonitorWidget = new MonitorWidget();
+        m_TabWidget->addTabPage(m_MonitorWidget, PLUGIN_MONITOR);
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedAppReport(const QList<Message::PackMessage>&)),
+            m_MonitorWidget,
+            SLOT(OnReceivedAppReport(const QList<Message::PackMessage>&)));
+    }
 }
 
 void MainWindow::OnReceivedLoginResponse(const Message::PackMessage& msg)
