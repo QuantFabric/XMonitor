@@ -22,6 +22,7 @@
 #include "Widget/EventLogWidget.h"
 #include "Widget/RiskJudgeWidget.h"
 #include "Widget/MonitorWidget.h"
+#include "Widget/OrderManagerWidget.h"
 
 class MainWindow : public QWidget
 {
@@ -41,6 +42,7 @@ private:
     EventLogWidget* m_EventLogWidget;
     RiskJudgeWidget* m_RiskJudgeWidget;
     MonitorWidget* m_MonitorWidget;
+    OrderManagerWidget* m_OrderManagerWidget;
 
     Utils::XMonitorConfig m_XMonitorConfig;
     QString m_UserName;

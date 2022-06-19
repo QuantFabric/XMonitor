@@ -92,6 +92,16 @@ void MainWindow::LoadPlugins()
             m_MonitorWidget,
             SLOT(OnReceivedAppReport(const QList<Message::PackMessage>&)));
     }
+
+    if(m_Plugins.contains(PLUGIN_ORDERMANAGER))
+    {
+        m_OrderManagerWidget = new OrderManagerWidget();
+        m_TabWidget->addTabPage(m_OrderManagerWidget, PLUGIN_ORDERMANAGER);
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedExecutionReport(const QList<Message::PackMessage>&)),
+            m_OrderManagerWidget,
+            SLOT(OnReceivedExecutionReport(const QList<Message::PackMessage>&)));
+    }
 }
 
 void MainWindow::OnReceivedLoginResponse(const Message::PackMessage& msg)

@@ -29,6 +29,7 @@ SOURCES += \
     Widget/EventLogWidget.cpp \
     Widget/RiskJudgeWidget.cpp \
     Widget/MonitorWidget.cpp \
+    Widget/OrderManagerWidget.cpp \
 
 HEADERS += \
     FinTechUI/DragTabWidget/DragTabBar.hpp \
@@ -56,6 +57,7 @@ HEADERS += \
     Widget/EventLogWidget.h \
     Widget/RiskJudgeWidget.h \
     Widget/MonitorWidget.h \
+    Widget/OrderManagerWidget.h \
 
 
 win32 {
@@ -68,4 +70,4 @@ else {
 }
 
 TEMPLATE = app
-TARGET = XMonitor_0.6.0
+TARGET = XMonitor_0.7.0
