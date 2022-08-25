@@ -666,18 +666,20 @@ void MonitorWidget::OnSelectColoRow(const QModelIndex& index)
     }
     if(m_SelectedColoRow > -1)
     {
-        QString Colo = m_AppStatusProxyModel->index(m_SelectedColoRow, 0).data().toString();
+        QString Colo = m_ColoStatusProxyModel->index(m_SelectedColoRow, 0).data().toString();
         QStringList ColoFilter;
         ColoFilter << Colo;
         m_Filter[0] = ColoFilter;
         m_AppStatusProxyModel->setRowFilter(m_Filter);
         m_AppStatusProxyModel->resetFilter();
+        m_Filter.clear();
     }
     else
     {
         m_Filter.clear();
         m_AppStatusProxyModel->setRowFilter(m_Filter);
         m_AppStatusProxyModel->resetFilter();
+        m_Filter.clear();
     }
 }
 
@@ -694,4 +696,5 @@ void MonitorWidget::OnFilterTable(const QVector<QStringList>& filter)
     m_Filter[0] = ColoFilter;
     m_ColoStatusProxyModel->setRowFilter(m_Filter);
     m_ColoStatusProxyModel->resetFilter();
+    m_Filter.clear();
 }

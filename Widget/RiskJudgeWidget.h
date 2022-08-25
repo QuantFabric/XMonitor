@@ -57,11 +57,23 @@ static QString GetLockedSide(int side)
 static QColor GetRiskReportColor(const Message::TRiskReport& RiskReport)
 {
     QColor color;
-    if(Message::ERiskReportType::ERISK_TICKER_CANCELLED == RiskReport.ReportType 
-        && RiskReport.CancelledCount > RiskReport.UpperLimit * 0.8)
+    if(Message::ERiskReportType::ERISK_TICKER_CANCELLED == RiskReport.ReportType)
     {
-        // 深橙色 #FF8C00
-        color = QColor("#FF8C00");
+        if(RiskReport.CancelledCount > RiskReport.UpperLimit * 0.8)
+        {
+            // 橙红色 #FF4500
+            color = QColor("#FF4500");
+        }
+        else if(RiskReport.CancelledCount > RiskReport.UpperLimit * 0.6)
+        {
+            // 深橙色 #FF8C00
+            color = QColor("#FF8C00");
+        }
+        else 
+        {
+            // 深蓝绿色 #FF8C00
+            color = QColor("#00CED1");
+        }
     }
     else if(Message::ERiskReportType::ERISK_ACCOUNT_LOCKED == RiskReport.ReportType
             && Message::ERiskLockedSide::ELOCK_BUY == RiskReport.LockedSide)
@@ -88,8 +100,9 @@ static QColor GetRiskReportColor(const Message::TRiskReport& RiskReport)
         color = QColor("#00CED1");
     }
     else
-    {   // 深橙色 #FF8C00
-        color = QColor("#FF8C00");
+    {   
+        // 深蓝绿色 #FF8C00
+        color = QColor("#00CED1");
     }
     return color;
 }
