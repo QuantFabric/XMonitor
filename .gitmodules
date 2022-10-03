@@ -1,0 +1,3 @@
+[submodule "FinTechUI"]
+	path = FinTechUI
+	url = git@gitcode.net:quantfabric/fintechui.git
