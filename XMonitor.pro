@@ -70,4 +70,4 @@ else {
 }
 
 TEMPLATE = app
-TARGET = XMonitor_0.7.0
+TARGET = XMonitor_0.9.0

@@ -1,11 +1,10 @@
 #include "HPPackClient.h"
 
-std::queue<Message::PackMessage> HPPackClient::m_PackMessageQueue;
+Utils::LockFreeQueue<Message::PackMessage> HPPackClient::m_PackMessageQueue(1 << 15);
 bool HPPackClient::m_IsConnected = false;
 int HPPackClient::m_UUID = 0;
 
 HP_Client HPPackClient::hpClient;
-QMutex HPPackClient::m_Mutex;
 extern Utils::Logger* gLogger;
 
 HPPackClient::HPPackClient(const char *ip, unsigned int port, const char* UserName, const char* PassWord)
@@ -103,21 +102,17 @@ void HPPackClient::WorkFunc()
         QList<Message::PackMessage> ExecuteReportList;
         QList<Message::PackMessage> RiskReportList;
         QList<Message::PackMessage> AppReportList;
-        m_Mutex.lock();
-        if (!m_PackMessageQueue.empty())
+        Message::PackMessage msg;
+        while(m_PackMessageQueue.Pop(msg))
         {
-            Message::PackMessage msg = m_PackMessageQueue.front();
             if(msg.MessageType == Message::EMessageType::ELoginResponse)
             {
                 emit ReceivedLoginResponse(msg);
-                m_PackMessageQueue.pop();
-                m_Mutex.unlock();
                 continue;
             }
-            if(!m_Login)
+            while(!m_Login)
             {
-                m_Mutex.unlock();
-                continue;
+                QThread::msleep(10);
             }
             if(msg.MessageType == Message::EMessageType::EEventLog)
             {
@@ -178,13 +173,6 @@ void HPPackClient::WorkFunc()
             {
                 StockDataList.append(msg);
             }
-            m_PackMessageQueue.pop();
-            m_Mutex.unlock();
-        }
-        else
-        {
-            m_Mutex.unlock();
-            QThread::msleep(100);
         }
         if(EventLogList.size() > 0)
         {
@@ -265,9 +253,7 @@ En_HP_HandleResult __stdcall HPPackClient::OnReceive(HP_Client pSender, HP_CONNI
 {
     Message::PackMessage message;
     memcpy(&message, pData, sizeof(message));
-    m_Mutex.lock();
-    m_PackMessageQueue.push(message);
-    m_Mutex.unlock();
+    while(!m_PackMessageQueue.Push(message));
     char buffer[256] = {0};
     sprintf(buffer, "0X%X", message.MessageType);
     Utils::gLogger->Log->debug("HPPackClient::OnReceive MessageType:{}", buffer);

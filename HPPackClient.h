@@ -22,6 +22,7 @@
 #include "HPSocket4C.h"
 #include "PackMessage.hpp"
 #include "Logger.h"
+#include "LockFreeQueue.hpp"
 
 class HPPackClient: public QObject
 {
@@ -56,6 +57,8 @@ protected:
     static En_HP_HandleResult __stdcall OnSend(HP_Client pSender, HP_CONNID dwConnID, const BYTE *pData, int iLength);
     static En_HP_HandleResult __stdcall OnReceive(HP_Client pSender, HP_CONNID dwConnID, const BYTE *pData, int iLength);
     static En_HP_HandleResult __stdcall OnClose(HP_Client pSender, HP_CONNID dwConnID, En_HP_SocketOperation enOperation, int iErrorCode);
+public:
+    static Utils::LockFreeQueue<Message::PackMessage> m_PackMessageQueue;
 private:
     std::string m_ServerIP;// XServer IP
     unsigned int m_ServerPort;// XServer Port
@@ -63,11 +66,9 @@ private:
     QString m_PassWord;
     HP_TcpPackClient m_pClient;// TCP PackClient
     HP_TcpPackClientListener m_pListener;// Listener
-    static std::queue<Message::PackMessage> m_PackMessageQueue;
     static HP_Client hpClient;// HP Socket Client
     static bool m_IsConnected;
     QThread m_WorkThread;// thread
-    static QMutex m_Mutex;
     QMap<QString, QVariantMap> m_ColoProductAccountMap;
     QMap<QString, QStringList> m_RiskIDAccountsMap;
     QMap<QString, QString> m_RiskIDColoMap;
