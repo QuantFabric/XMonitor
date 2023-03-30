@@ -994,7 +994,8 @@ void OrderManagerWidget::UpdateOrderStatus(const Message::PackMessage& msg)
         Message::EOrderStatus::EBROKER_ERROR == msg.OrderStatus.OrderStatus ||
         Message::EOrderStatus::EEXCHANGE_ERROR == msg.OrderStatus.OrderStatus ||
         Message::EOrderStatus::ERISK_ORDER_REJECTED == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatus::ERISK_CHECK_INIT == msg.OrderStatus.OrderStatus)
+        Message::EOrderStatus::ERISK_CHECK_INIT == msg.OrderStatus.OrderStatus ||
+        Message::EOrderStatus::ERISK_CHECK_SELFMATCH == msg.OrderStatus.OrderStatus)
     {
         UpdateHistoryOrderTable(msg.OrderStatus);
     }
