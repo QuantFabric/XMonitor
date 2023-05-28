@@ -212,6 +212,9 @@ static QString GetOrderStatus(int status)
     case Message::EOrderStatus::ERISK_CHECK_SELFMATCH:
         buffer = QString::fromUtf8("风控自成交");
         break;
+    case Message::EOrderStatus::ERISK_CHECK_CANCELLIMIT:
+        buffer = QString::fromUtf8("风控撤单限制");
+        break;
     default:
         buffer = QString::fromUtf8("Unkown");
         break;
@@ -301,6 +304,11 @@ static QColor GetOrderStatusColor(const Message::TOrderStatus& OrderStatus)
         color = QColor("#FF4500");
     }
     else if(Message::EOrderStatus::ERISK_CHECK_SELFMATCH == OrderStatus.OrderStatus)
+    {
+        // ERiskCancelRejected 橙红色 #FF4500
+        color = QColor("#FF4500");
+    }
+    else if(Message::EOrderStatus::ERISK_CHECK_CANCELLIMIT == OrderStatus.OrderStatus)
     {
         // ERiskCancelRejected 橙红色 #FF4500
         color = QColor("#FF4500");
