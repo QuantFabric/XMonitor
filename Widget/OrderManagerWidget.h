@@ -43,28 +43,16 @@ static QString GetStockOrderSide(int side)
     switch (side)
     {
     case Message::EOrderSide::EOPEN_LONG:
-        buffer = "Buy";
-        break;
-    case Message::EOrderSide::ECLOSE_TD_LONG:
-        buffer = "CloseTdLong";
-        break;
-    case Message::EOrderSide::ECLOSE_YD_LONG:
-        buffer = "LongTdSell4RePay";
-        break;
-    case Message::EOrderSide::EOPEN_SHORT:
-        buffer = "OpenShort";
-        break;
-    case Message::EOrderSide::ECLOSE_TD_SHORT:
-        buffer = "CloseTdShort";
-        break;
-    case Message::EOrderSide::ECLOSE_YD_SHORT:
-        buffer = "TdBuy4RePay";
+        buffer = "普通买入";
         break;
     case Message::EOrderSide::ECLOSE_LONG:
-        buffer = "Sell";
+        buffer = "普通卖出";
         break;
-    case Message::EOrderSide::ECLOSE_SHORT:
-        buffer = "CloseShort";
+    case Message::EOrderSide::ESIDE_COLLATERAL_BUY:
+        buffer = "担保品买入";
+        break;
+    case Message::EOrderSide::ESIDE_COLLATERAL_SELL:
+        buffer = "担保品卖出";
         break;
     case Message::EOrderSide::ESIDE_REVERSE_REPO:
         buffer = "国债逆回购申购";
@@ -74,11 +62,6 @@ static QString GetStockOrderSide(int side)
         break;
     case Message::EOrderSide::ESIDE_ALLOTMENT:
         buffer = "配股配债认购";
-        break;
-    case Message::EOrderSide::ESIDE_COLLATERAL_TRANSFER_IN:
-        buffer = "担保品转入";
-    case Message::EOrderSide::ESIDE_COLLATERAL_TRANSFER_OUT:
-        buffer = "担保品转出";
         break;
     case Message::EOrderSide::ESIDE_MARGIN_BUY:
         buffer = "融资买入";
@@ -337,8 +320,11 @@ static QColor GetStockAccountPositionColor(const Message::TAccountPosition& Acco
     QColor color;
     if(AccountPosition.StockPosition.LongTdBuy > 0 
         || AccountPosition.StockPosition.LongTdSell > 0
-        || AccountPosition.StockPosition.MarginRepaid > 0
-        || AccountPosition.StockPosition.ShortSellRepaid > 0)
+        || AccountPosition.StockPosition.MarginTdBuy > 0
+        || AccountPosition.StockPosition.MarginTdSell > 0
+        || AccountPosition.StockPosition.ShortTdSell > 0
+        || AccountPosition.StockPosition.ShortTdBuy > 0
+        || AccountPosition.StockPosition.ShortDirectRepaid > 0)
     {
         // 橙色 #FFA500
         color = QColor("#FFA500");

@@ -464,8 +464,8 @@ void OrderManagerWidget::InitStockTickerPositionTable()
 {
     QStringList headerData;
     headerData << "Colo" << "Broker" << "Product" << "Account" << "Ticker" << "Exchange" << "LongYdPosition" << "LongPosition" 
-               << "LongTdBuy" << "LongTdSell" << "MarginYdPosition" << "MarginPosition" << "MarginRepaid" 
-               << "ShortYdPosition" << "ShortPosition" << "ShortSellRepaid" << "RepayDirectAvl" << "SpecialPositionAvl" << "UpdateTime";
+               << "LongTdBuy" << "LongTdSell" << "MarginYdPosition" << "MarginPosition" << "MarginTdBuy" << "MarginTdSell"
+               << "ShortYdPosition" << "ShortPosition" << "ShortTdSell" << "ShortTdBuy" << "ShortDirectRepaid" << "SpecialPositionAvl" << "UpdateTime";
     m_StockTickerPositionTableView = new FinTechUI::FrozenTableView(6);
     m_StockTickerPositionTableView->setObjectName("StockPositionTable");
     m_StockTickerPositionTableModel = new FinTechUI::XTableModel;
@@ -475,7 +475,7 @@ void OrderManagerWidget::InitStockTickerPositionTable()
     m_StockTickerPositionTableModel->setHeaderLabels(headerData);
     m_StockTickerPositionTableView->setModel(m_StockTickerPositionProxyModel);
     m_StockTickerPositionProxyModel->setDynamicSortFilter(true);
-    m_StockTickerPositionTableView->sortByColumn(18, Qt::DescendingOrder);
+    m_StockTickerPositionTableView->sortByColumn(20, Qt::DescendingOrder);
     
     int column = 0;
     m_StockTickerPositionTableView->setColumnWidth(column++, 60);
@@ -495,6 +495,8 @@ void OrderManagerWidget::InitStockTickerPositionTable()
     m_StockTickerPositionTableView->setColumnWidth(column++, 100);
     m_StockTickerPositionTableView->setColumnWidth(column++, 100);
     m_StockTickerPositionTableView->setColumnWidth(column++, 100);
+    m_StockTickerPositionTableView->setColumnWidth(column++, 100);
+    m_StockTickerPositionTableView->setColumnWidth(column++, 120);
     m_StockTickerPositionTableView->setColumnWidth(column++, 120);
     m_StockTickerPositionTableView->setColumnWidth(column++, 120);
 }
@@ -820,28 +822,32 @@ void OrderManagerWidget::AppendStockRow(const Message::TAccountPosition& Account
     ModelRow->push_back(TickerItem);
     FinTechUI::XTableModelItem* ExchangeIDItem = new FinTechUI::XTableModelItem(AccountPosition.ExchangeID);
     ModelRow->push_back(ExchangeIDItem);
-    FinTechUI::XTableModelItem* LongTdVolumeItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongYdPosition);
-    ModelRow->push_back(LongTdVolumeItem);
-    FinTechUI::XTableModelItem* LongYdVolumeItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongPosition);
-    ModelRow->push_back(LongYdVolumeItem);
-    FinTechUI::XTableModelItem* LongOpenVolumeItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongTdBuy);
-    ModelRow->push_back(LongOpenVolumeItem);
-    FinTechUI::XTableModelItem* LongOpeningVolumeItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongTdSell);
-    ModelRow->push_back(LongOpeningVolumeItem);
+    FinTechUI::XTableModelItem* LongYdPositionItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongYdPosition);
+    ModelRow->push_back(LongYdPositionItem);
+    FinTechUI::XTableModelItem* LongPositionItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongPosition);
+    ModelRow->push_back(LongPositionItem);
+    FinTechUI::XTableModelItem* LongTdBuyItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongTdBuy);
+    ModelRow->push_back(LongTdBuyItem);
+    FinTechUI::XTableModelItem* LongTdSellItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.LongTdSell);
+    ModelRow->push_back(LongTdSellItem);
     FinTechUI::XTableModelItem* MarginYdPositionItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.MarginYdPosition);
     ModelRow->push_back(MarginYdPositionItem);
     FinTechUI::XTableModelItem* MarginPositionItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.MarginPosition);
     ModelRow->push_back(MarginPositionItem);
-    FinTechUI::XTableModelItem* MarginRepaidItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.MarginRepaid);
-    ModelRow->push_back(MarginRepaidItem);
+    FinTechUI::XTableModelItem* MarginTdBuyItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.MarginTdBuy);
+    ModelRow->push_back(MarginTdBuyItem);
+    FinTechUI::XTableModelItem* MarginTdSellItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.MarginTdSell);
+    ModelRow->push_back(MarginTdSellItem);
     FinTechUI::XTableModelItem* ShortYdPositionItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.ShortYdPosition);
     ModelRow->push_back(ShortYdPositionItem);
     FinTechUI::XTableModelItem* ShortPositionItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.ShortPosition);
     ModelRow->push_back(ShortPositionItem);
-    FinTechUI::XTableModelItem* ShortSellRepaidItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.ShortSellRepaid);
-    ModelRow->push_back(ShortSellRepaidItem);
-    FinTechUI::XTableModelItem* RepayDirectAvlItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.RepayDirectAvl);
-    ModelRow->push_back(RepayDirectAvlItem);
+    FinTechUI::XTableModelItem* ShortTdSellItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.ShortTdSell);
+    ModelRow->push_back(ShortTdSellItem);
+    FinTechUI::XTableModelItem* ShortTdBuyItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.ShortTdBuy);
+    ModelRow->push_back(ShortTdBuyItem);
+    FinTechUI::XTableModelItem* ShortDirectRepaidItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.ShortDirectRepaid);
+    ModelRow->push_back(ShortDirectRepaidItem);
     FinTechUI::XTableModelItem* SpecialPositionAvlItem = new FinTechUI::XTableModelItem(AccountPosition.StockPosition.SpecialPositionAvl);
     ModelRow->push_back(SpecialPositionAvlItem);
     FinTechUI::XTableModelItem* UpdateTimeItem = new FinTechUI::XTableModelItem(AccountPosition.UpdateTime + 11, Qt::AlignLeft | Qt::AlignVCenter);
@@ -863,16 +869,19 @@ void OrderManagerWidget::UpdateStockAccountPosition(const Message::TAccountPosit
     (*ModelRow)[9]->setText(AccountPosition.StockPosition.LongTdSell);
     (*ModelRow)[10]->setText(AccountPosition.StockPosition.MarginYdPosition);
     (*ModelRow)[11]->setText(AccountPosition.StockPosition.MarginPosition);
-    (*ModelRow)[12]->setText(AccountPosition.StockPosition.MarginRepaid);
-    (*ModelRow)[13]->setText(AccountPosition.StockPosition.ShortYdPosition);
-    (*ModelRow)[14]->setText(AccountPosition.StockPosition.ShortPosition);
-    (*ModelRow)[15]->setText(AccountPosition.StockPosition.ShortSellRepaid);
-    (*ModelRow)[16]->setText(AccountPosition.StockPosition.RepayDirectAvl);
-    (*ModelRow)[17]->setText(AccountPosition.StockPosition.SpecialPositionAvl);
-    (*ModelRow)[18]->setText(AccountPosition.UpdateTime + 11);
+    (*ModelRow)[12]->setText(AccountPosition.StockPosition.MarginTdBuy);
+    (*ModelRow)[13]->setText(AccountPosition.StockPosition.MarginTdSell);
+    (*ModelRow)[14]->setText(AccountPosition.StockPosition.ShortYdPosition);
+    (*ModelRow)[15]->setText(AccountPosition.StockPosition.ShortPosition);
+    (*ModelRow)[16]->setText(AccountPosition.StockPosition.ShortTdSell);
+    (*ModelRow)[17]->setText(AccountPosition.StockPosition.ShortTdBuy);
+    (*ModelRow)[18]->setText(AccountPosition.StockPosition.ShortDirectRepaid);
+    (*ModelRow)[19]->setText(AccountPosition.StockPosition.SpecialPositionAvl);
+    (*ModelRow)[20]->setText(AccountPosition.UpdateTime + 11);
     FinTechUI::XTableModel::setRowBackgroundColor(ModelRow, GetStockAccountPositionColor(AccountPosition));
     m_StockTickerPositionTableModel->updateRow(ModelRow);
 }
+
 
 void OrderManagerWidget::UpdateFutureAccountPosition(const Message::PackMessage& msg)
 {
