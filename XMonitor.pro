@@ -12,8 +12,8 @@ INCLUDEPATH += "$$CurrentProjectPath/../Utils/"
 INCLUDEPATH += "$$CurrentProjectPath/../XAPI/HP-Socket/5.8.2/include/"
 LIBS += "$$CurrentProjectPath/../XAPI/HP-Socket/5.8.2/lib/libhpsocket4c.a"
 # YAML-CPP
-INCLUDEPATH += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.6.3/include/"
-LIBS += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.6.3/lib/libyaml-cpp.a"
+INCLUDEPATH += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.8.0/include/"
+LIBS += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.8.0/lib/libyaml-cpp.a"
 # SPDLog
 INCLUDEPATH += "$$CurrentProjectPath/../XAPI/SPDLog/1.8.5/include/"
 LIBS += "$$CurrentProjectPath/../XAPI/SPDLog/1.8.5/lib/libspdlog.a"
