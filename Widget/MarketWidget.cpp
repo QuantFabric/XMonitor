@@ -249,7 +249,7 @@ void MarketWidget::AppendRow(QString Colo, const MarketData::TFutureMarketData& 
     sprintf(buffer, "%.3f", data.LowerLimitPrice);
     FinTechUI::XTableModelItem* LowerLimitPricetem = new FinTechUI::XTableModelItem(buffer, Qt::AlignRight | Qt::AlignVCenter);
     ModelRow->push_back(LowerLimitPricetem);
-    FinTechUI::XTableModelItem* UpdateTimetem = new FinTechUI::XTableModelItem(data.RevDataLocalTime + 11, Qt::AlignLeft | Qt::AlignVCenter);
+    FinTechUI::XTableModelItem* UpdateTimetem = new FinTechUI::XTableModelItem(data.RecvLocalTime + 11, Qt::AlignLeft | Qt::AlignVCenter);
     ModelRow->push_back(UpdateTimetem);
 
     FinTechUI::XTableModel::setRowBackgroundColor(ModelRow, QColor("#00CED1"));
@@ -311,7 +311,7 @@ void MarketWidget::UpdateRow(QString Colo, const MarketData::TFutureMarketData& 
     (*ModelRow)[16]->setText(buffer);
     sprintf(buffer, "%.3f", data.LowestPrice);
     (*ModelRow)[17]->setText(buffer);
-    (*ModelRow)[20]->setText(data.RevDataLocalTime + 11);
+    (*ModelRow)[20]->setText(data.RecvLocalTime + 11);
 
     m_MarketTableModel->updateRow(ModelRow);
 }
