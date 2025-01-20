@@ -676,15 +676,15 @@ void OrderManagerWidget::UpdateExecutionReport(const Message::PackMessage& msg)
         break;
     case Message::EMessageType::EAccountPosition:
     {
-        if(Message::EBusinessType::ESTOCK == msg.AccountPosition.BussinessType)
+        if(Message::EBusinessType::ESTOCK == msg.AccountPosition.BusinessType)
         {
             UpdateStockAccountPosition(msg);
         }
-        else if(Message::EBusinessType::ECREDIT == msg.AccountPosition.BussinessType)
+        else if(Message::EBusinessType::ECREDIT == msg.AccountPosition.BusinessType)
         {
             UpdateStockAccountPosition(msg);
         }
-        else if(Message::EBusinessType::EFUTURE == msg.AccountPosition.BussinessType)
+        else if(Message::EBusinessType::EFUTURE == msg.AccountPosition.BusinessType)
         {
             UpdateFutureAccountPosition(msg);
         }
@@ -997,14 +997,14 @@ void OrderManagerWidget::UpdateFutureAccountPosition(const Message::TAccountPosi
 void OrderManagerWidget::UpdateOrderStatus(const Message::PackMessage& msg)
 {
     UpdateHangingOrderTable(msg.OrderStatus);
-    if(Message::EOrderStatus::EALLTRADED == msg.OrderStatus.OrderStatus || 
-        Message::EOrderStatus::ECANCELLED == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatus::EPARTTRADED_CANCELLED == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatus::EBROKER_ERROR == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatus::EEXCHANGE_ERROR == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatus::ERISK_ORDER_REJECTED == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatus::ERISK_CHECK_INIT == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatus::ERISK_CHECK_SELFMATCH == msg.OrderStatus.OrderStatus)
+    if(Message::EOrderStatusType::EALLTRADED == msg.OrderStatus.OrderStatus || 
+        Message::EOrderStatusType::ECANCELLED == msg.OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::EPARTTRADED_CANCELLED == msg.OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::EBROKER_ERROR == msg.OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::EEXCHANGE_ERROR == msg.OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::ERISK_ORDER_REJECTED == msg.OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::ERISK_CHECK_INIT == msg.OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::ERISK_CHECK_SELFMATCH == msg.OrderStatus.OrderStatus)
     {
         UpdateHistoryOrderTable(msg.OrderStatus);
     }
@@ -1040,16 +1040,16 @@ void OrderManagerWidget::UpdateOrderStatus(const Message::PackMessage& msg)
 
 void OrderManagerWidget::UpdateHangingOrderTable(const Message::TOrderStatus& OrderStatus)
 {
-    if(Message::EOrderStatus::EORDER_SENDED == OrderStatus.OrderStatus)
+    if(Message::EOrderStatusType::EORDER_SENDED == OrderStatus.OrderStatus)
     {
         AppendRow(OrderStatus, m_HangingOrderTableModel);
     }
-    else if(Message::EOrderStatus::EALLTRADED == OrderStatus.OrderStatus || 
-        Message::EOrderStatus::ECANCELLED == OrderStatus.OrderStatus ||
-        Message::EOrderStatus::EPARTTRADED_CANCELLED == OrderStatus.OrderStatus ||
-        Message::EOrderStatus::EBROKER_ERROR == OrderStatus.OrderStatus ||
-        Message::EOrderStatus::EEXCHANGE_ERROR == OrderStatus.OrderStatus ||
-        Message::EOrderStatus::ERISK_ORDER_REJECTED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EALLTRADED == OrderStatus.OrderStatus || 
+        Message::EOrderStatusType::ECANCELLED == OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::EPARTTRADED_CANCELLED == OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::EBROKER_ERROR == OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::EEXCHANGE_ERROR == OrderStatus.OrderStatus ||
+        Message::EOrderStatusType::ERISK_ORDER_REJECTED == OrderStatus.OrderStatus)
     {
         RemoveRow(OrderStatus, m_HangingOrderTableModel);
     }
@@ -1093,15 +1093,15 @@ void OrderManagerWidget::AppendRow(const Message::TOrderStatus& OrderStatus, Fin
     FinTechUI::XTableModelItem* StatusItem = new FinTechUI::XTableModelItem(GetOrderStatus(OrderStatus.OrderStatus));
     ModelRow->push_back(StatusItem);
     QString OrderSide;
-    if(Message::EBusinessType::EFUTURE == OrderStatus.BussinessType)
+    if(Message::EBusinessType::EFUTURE == OrderStatus.BusinessType)
     {
         OrderSide = GetFutureOrderSide(OrderStatus.OrderSide);
     }
-    else if(Message::EBusinessType::ESTOCK == OrderStatus.BussinessType)
+    else if(Message::EBusinessType::ESTOCK == OrderStatus.BusinessType)
     {
         OrderSide = GetStockOrderSide(OrderStatus.OrderSide);
     }
-    else if(Message::EBusinessType::ECREDIT == OrderStatus.BussinessType)
+    else if(Message::EBusinessType::ECREDIT == OrderStatus.BusinessType)
     {
         OrderSide = GetStockOrderSide(OrderStatus.OrderSide);
     }
@@ -1142,7 +1142,7 @@ void OrderManagerWidget::AppendRow(const Message::TOrderStatus& OrderStatus, Fin
     FinTechUI::XTableModel::setRowBackgroundColor(ModelRow, GetOrderStatusColor(OrderStatus));
 
     tableModel->appendRow(ModelRow);
-    if(Message::EOrderStatus::EORDER_SENDED == OrderStatus.OrderStatus)
+    if(Message::EOrderStatusType::EORDER_SENDED == OrderStatus.OrderStatus)
     {
         QString Key = QString(OrderStatus.Account) + ":" + OrderStatus.OrderRef;
         auto it = m_HangingOrderMap.find(Key);

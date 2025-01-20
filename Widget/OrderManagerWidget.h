@@ -150,52 +150,52 @@ static QString GetOrderStatus(int status)
     QString buffer;
     switch (status)
     {
-    case Message::EOrderStatus::EORDER_SENDED:
+    case Message::EOrderStatusType::EORDER_SENDED:
         buffer = QString::fromUtf8("订单已发出");
         break;
-    case Message::EOrderStatus::EBROKER_ACK:
+    case Message::EOrderStatusType::EBROKER_ACK:
         buffer = QString::fromUtf8("柜台确认");
         break;
-    case Message::EOrderStatus::EEXCHANGE_ACK:
+    case Message::EOrderStatusType::EEXCHANGE_ACK:
         buffer = QString::fromUtf8("交易所确认");
         break;
-    case Message::EOrderStatus::EPARTTRADED:
+    case Message::EOrderStatusType::EPARTTRADED:
         buffer = QString::fromUtf8("部分成交");
         break;
-    case Message::EOrderStatus::EALLTRADED:
+    case Message::EOrderStatusType::EALLTRADED:
         buffer = QString::fromUtf8("全部成交");
         break;
-    case Message::EOrderStatus::ECANCELLING:
+    case Message::EOrderStatusType::ECANCELLING:
         buffer = QString::fromUtf8("正在撤单");
         break;
-    case Message::EOrderStatus::ECANCELLED:
+    case Message::EOrderStatusType::ECANCELLED:
         buffer = QString::fromUtf8("撤单");
         break;
-    case Message::EOrderStatus::EPARTTRADED_CANCELLED:
+    case Message::EOrderStatusType::EPARTTRADED_CANCELLED:
         buffer = QString::fromUtf8("部成部撤");
         break;
-    case Message::EOrderStatus::EBROKER_ERROR:
+    case Message::EOrderStatusType::EBROKER_ERROR:
         buffer = QString::fromUtf8("柜台错误");
         break;
-    case Message::EOrderStatus::EEXCHANGE_ERROR:
+    case Message::EOrderStatusType::EEXCHANGE_ERROR:
         buffer = QString::fromUtf8("交易所错误");
         break;
-    case Message::EOrderStatus::EACTION_ERROR:
+    case Message::EOrderStatusType::EACTION_ERROR:
         buffer = QString::fromUtf8("撤单错误");
         break;
-    case Message::EOrderStatus::ERISK_ORDER_REJECTED:
+    case Message::EOrderStatusType::ERISK_ORDER_REJECTED:
         buffer = QString::fromUtf8("风控拒单");
         break;
-    case Message::EOrderStatus::ERISK_ACTION_REJECTED:
+    case Message::EOrderStatusType::ERISK_ACTION_REJECTED:
         buffer = QString::fromUtf8("风控拒绝撤单");
         break;
-    case Message::EOrderStatus::ERISK_CHECK_INIT:
+    case Message::EOrderStatusType::ERISK_CHECK_INIT:
         buffer = QString::fromUtf8("初始化检查");
         break;
-    case Message::EOrderStatus::ERISK_CHECK_SELFMATCH:
+    case Message::EOrderStatusType::ERISK_CHECK_SELFMATCH:
         buffer = QString::fromUtf8("风控自成交");
         break;
-    case Message::EOrderStatus::ERISK_CHECK_CANCELLIMIT:
+    case Message::EOrderStatusType::ERISK_CHECK_CANCELLIMIT:
         buffer = QString::fromUtf8("风控撤单限制");
         break;
     default:
@@ -208,7 +208,7 @@ static QString GetOrderStatus(int status)
 static QColor GetOrderStatusColor(const Message::TOrderStatus& OrderStatus)
 {
     QColor color;
-    if(Message::EOrderStatus::ERISK_CHECK_INIT == OrderStatus.OrderStatus)
+    if(Message::EOrderStatusType::ERISK_CHECK_INIT == OrderStatus.OrderStatus)
     {
         if(OrderStatus.ErrorID == 0)
         {
@@ -222,76 +222,76 @@ static QColor GetOrderStatusColor(const Message::TOrderStatus& OrderStatus)
         }
     }
     // EOrderSended 浅蓝色 #F0FFFF
-    else if(Message::EOrderStatus::EORDER_SENDED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EORDER_SENDED == OrderStatus.OrderStatus)
     {
         color = QColor("#ADD8E6");
     }
     // EBrokerACK 浅绿色 #AFEEEE
-    else if(Message::EOrderStatus::EBROKER_ACK == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EBROKER_ACK == OrderStatus.OrderStatus)
     {
         color = QColor("#AFEEEE");
     }
-    else if(Message::EOrderStatus::EEXCHANGE_ACK == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EEXCHANGE_ACK == OrderStatus.OrderStatus)
     {
         // EExchangeACK 绿松石 ＃40E0D0
         color = QColor("#40E0D0");
     }
-    else if(Message::EOrderStatus::EPARTTRADED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EPARTTRADED == OrderStatus.OrderStatus)
     {
         // EPartTraded 深天蓝 #00BFFF
         color = QColor("#00BFFF");
     }
-    else if(Message::EOrderStatus::EALLTRADED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EALLTRADED == OrderStatus.OrderStatus)
     {
         // EAllTraded 深蓝绿色 #00CED1
         color = QColor("#00CED1");
     }
-    else if(Message::EOrderStatus::ECANCELLING == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::ECANCELLING == OrderStatus.OrderStatus)
     {
         // ECancelling 橙色 #FFA500
         color = QColor("#FFA500");
     }
-    else if(Message::EOrderStatus::ECANCELLED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::ECANCELLED == OrderStatus.OrderStatus)
     {
         // ECancelled 深橙色 #FF8C00
         color = QColor("#FF8C00");
     }
-    else if(Message::EOrderStatus::EPARTTRADED_CANCELLED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EPARTTRADED_CANCELLED == OrderStatus.OrderStatus)
     {
         // EPartTradedCancelled 深蓝色 ＃00BFFF
         color = QColor("#00BFFF");
     }
-    else if(Message::EOrderStatus::EBROKER_ERROR == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EBROKER_ERROR == OrderStatus.OrderStatus)
     {
         // EExchangeError 橙红色 #FF4500
         color = QColor("#FF4500");
     }
-    else if(Message::EOrderStatus::EEXCHANGE_ERROR == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EEXCHANGE_ERROR == OrderStatus.OrderStatus)
     {
         // EExchangeError 橙红色 #FF4500
         color = QColor("#FF4500");
     }
-    else if(Message::EOrderStatus::EACTION_ERROR == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::EACTION_ERROR == OrderStatus.OrderStatus)
     {
         // EActionError 橙红色 #FF4500
         color = QColor("#FF4500");
     }
-    else if(Message::EOrderStatus::ERISK_ORDER_REJECTED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::ERISK_ORDER_REJECTED == OrderStatus.OrderStatus)
     {
         // ERiskRejected 橙红色 #FF4500
         color = QColor("#FF4500");
     }
-    else if(Message::EOrderStatus::ERISK_ACTION_REJECTED == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::ERISK_ACTION_REJECTED == OrderStatus.OrderStatus)
     {
         // ERiskCancelRejected 橙红色 #FF4500
         color = QColor("#FF4500");
     }
-    else if(Message::EOrderStatus::ERISK_CHECK_SELFMATCH == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::ERISK_CHECK_SELFMATCH == OrderStatus.OrderStatus)
     {
         // ERiskCancelRejected 橙红色 #FF4500
         color = QColor("#FF4500");
     }
-    else if(Message::EOrderStatus::ERISK_CHECK_CANCELLIMIT == OrderStatus.OrderStatus)
+    else if(Message::EOrderStatusType::ERISK_CHECK_CANCELLIMIT == OrderStatus.OrderStatus)
     {
         // ERiskCancelRejected 橙红色 #FF4500
         color = QColor("#FF4500");
