@@ -1,5 +1,4 @@
 #include "MonitorWidget.h"
-extern Utils::Logger *gLogger;
 
 MonitorWidget::MonitorWidget(QWidget *parent) : FinTechUI::TabPageWidget(parent)
 {
@@ -578,7 +577,7 @@ void MonitorWidget::KillApp(const Message::TAppStatus& AppStatus)
     sprintf(cmd, "sudo kill -9 %d", AppStatus.PID);
     strncpy(Command.Command.Command, cmd, sizeof(Command.Command.Command));
     HPPackClient::SendData((const unsigned char *)&Command, sizeof(Command));
-    Utils::gLogger->Log->info("MonitorWidget::KillApp Colo:{} Account:{} Command:{}", Command.Command.Colo, Command.Command.Account, Command.Command.Command);
+    FMTLOG(fmtlog::INF, "MonitorWidget::KillApp Colo:{} Account:{} Command:{}", Command.Command.Colo, Command.Command.Account, Command.Command.Command);
 }
 
 void MonitorWidget::StartApp(const Message::TAppStatus& AppStatus)
@@ -590,7 +589,7 @@ void MonitorWidget::StartApp(const Message::TAppStatus& AppStatus)
     strncpy(Command.Command.Account, AppStatus.Account, sizeof(Command.Command.Account));
     strncpy(Command.Command.Command, AppStatus.StartScript, sizeof(Command.Command.Command));
     HPPackClient::SendData((const unsigned char *)&Command, sizeof(Command));
-    Utils::gLogger->Log->info("MonitorWidget::StartApp Colo:{} Account:{} Command:{}", Command.Command.Colo, Command.Command.Account, Command.Command.Command);
+    FMTLOG(fmtlog::INF, "MonitorWidget::StartApp Colo:{} Account:{} Command:{}", Command.Command.Colo, Command.Command.Account, Command.Command.Command);
 }
 
 void MonitorWidget::OnReceivedAppReport(const QList<Message::PackMessage>& items)
@@ -600,12 +599,12 @@ void MonitorWidget::OnReceivedAppReport(const QList<Message::PackMessage>& items
         if(items.at(i).MessageType == Message::EMessageType::EAppStatus)
         {
             UpdateAppStatusTable(items.at(i));
-            Utils::gLogger->Log->info("MonitorWidget::OnReceivedAppReport AppName:{}", items.at(i).AppStatus.AppName);
+            FMTLOG(fmtlog::INF, "MonitorWidget::OnReceivedAppReport AppName:{}", items.at(i).AppStatus.AppName);
         }
         else if(items.at(i).MessageType == Message::EMessageType::EColoStatus)
         {
             UpdateColoStatusTable(items.at(i));
-            Utils::gLogger->Log->info("MonitorWidget::OnReceivedAppReport Colo:{}", items.at(i).ColoStatus.Colo);
+            FMTLOG(fmtlog::INF, "MonitorWidget::OnReceivedAppReport Colo:{}", items.at(i).ColoStatus.Colo);
         }
     }
 }

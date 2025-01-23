@@ -21,7 +21,7 @@
 #include <QMutex>
 #include "HPSocket4C.h"
 #include "PackMessage.hpp"
-#include "Logger.h"
+#include "FMTLogger.hpp"
 #include "LockFreeQueue.hpp"
 
 class HPPackClient: public QObject

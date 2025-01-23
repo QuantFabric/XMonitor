@@ -1,5 +1,4 @@
 #include "EventLogWidget.h"
-extern Utils::Logger *gLogger;
 
 EventLogWidget::EventLogWidget(QWidget *parent) : FinTechUI::TabPageWidget(parent)
 {
@@ -73,7 +72,7 @@ void EventLogWidget::OnReceivedEventLog(const QList<Message::PackMessage>& items
 {
     for(int i = 0; i < items.size(); i++)
     {
-        Utils::gLogger->Log->info("EventLogWidget::OnReceivedEventLog Event:{}", items.at(i).EventLog.Event);
+        FMTLOG(fmtlog::INF, "EventLogWidget::OnReceivedEventLog Event:{}", items.at(i).EventLog.Event);
         AppendEventLog(items.at(i));
     }
 }

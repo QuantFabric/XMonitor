@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <stdio.h>
-#include "Logger.h"
+#include "FMTLogger.hpp"
 #include "MainWindow.h"
 
 void printHelp()
@@ -55,12 +55,10 @@ int main(int argc, char *argv[])
     {
         cmd += (std::string(argv[i]) + " ");
     }
-    Utils::gLogger = Utils::Singleton<Utils::Logger>::GetInstance();
-    Utils::gLogger->setLogPath(app_log_path, "XMonitor");
-    Utils::gLogger->Init();
-    Utils::gLogger->setDebugLevel(debug);
-    Utils::gLogger->Log->info(cmd);
-    Utils::gLogger->Log->info("XMonitor AppCommitID:{} BranchName:{}", APP_COMMIT_ID, APP_BRANCH_NAME);
+    FMTLog::Logger::Init(app_log_path, "XMonitor");
+    FMTLog::Logger::SetDebugLevel(debug);
+    FMTLOG(fmtlog::INF, cmd);
+    FMTLOG(fmtlog::INF, "XMonitor AppCommitID:{} BranchName:{}", APP_COMMIT_ID, APP_BRANCH_NAME);
 
     QApplication a(argc, argv);
     MainWindow w(configPath);

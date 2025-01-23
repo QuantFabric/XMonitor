@@ -1,5 +1,4 @@
 #include "MarketWidget.h"
-extern Utils::Logger *gLogger;
 
 MarketWidget::MarketWidget(QWidget *parent) : FinTechUI::TabPageWidget(parent)
 {
@@ -321,7 +320,7 @@ void MarketWidget::OnReceivedFutureData(const QList<Message::PackMessage>& items
     for(int i = 0; i < items.size(); i++)
     {
         UpdateFutureData(items.at(i));
-        Utils::gLogger->Log->info("MarketWidget::OnReceivedFutureData Ticker:{} Tick:{}", items.at(i).FutureMarketData.Ticker, items.at(i).FutureMarketData.Tick);
+        FMTLOG(fmtlog::INF, "MarketWidget::OnReceivedFutureData Ticker:{} Tick:{}", items.at(i).FutureMarketData.Ticker, items.at(i).FutureMarketData.Tick);
         QString Colo = items.at(i).FutureMarketData.Colo;
         QString Ticker = items.at(i).FutureMarketData.Ticker;
         QString Key = Colo + ":" + Ticker;
@@ -339,7 +338,7 @@ void MarketWidget::OnReceivedSpotData(const QList<Message::PackMessage>& items)
     for(int i = 0; i < items.size(); i++)
     {
         UpdateSpotData(items.at(i));
-        Utils::gLogger->Log->info("MarketWidget::OnReceivedSpotData Ticker:{} Tick:{}", items.at(i).FutureMarketData.Ticker, items.at(i).FutureMarketData.Tick);
+        FMTLOG(fmtlog::INF, "MarketWidget::OnReceivedSpotData Ticker:{} Tick:{}", items.at(i).FutureMarketData.Ticker, items.at(i).FutureMarketData.Tick);
         QString Colo = items.at(i).FutureMarketData.Colo;
         QString Ticker = items.at(i).FutureMarketData.Ticker;
         QString Key = Colo + ":" + Ticker;
@@ -356,7 +355,7 @@ void MarketWidget::OnReceivedStockData(const QList<Message::PackMessage>& items)
 {
     for(int i = 0; i < items.size(); i++)
     {
-        Utils::gLogger->Log->info("MarketWidget::OnReceivedStockData Tick:{}", items.at(i).StockMarketData.Tick);
+        FMTLOG(fmtlog::INF, "MarketWidget::OnReceivedStockData Tick:{}", items.at(i).StockMarketData.Tick);
     }
 }
 

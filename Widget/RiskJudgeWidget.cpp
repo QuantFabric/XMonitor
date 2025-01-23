@@ -1,5 +1,4 @@
 #include "RiskJudgeWidget.h"
-extern Utils::Logger *gLogger;
 
 RiskJudgeWidget::RiskJudgeWidget(QWidget *parent) : FinTechUI::TabPageWidget(parent)
 {
@@ -144,8 +143,8 @@ void RiskJudgeWidget::InitControlPannel()
             strncpy(message.Command.Account, RiskID.toStdString().c_str(), sizeof(message.Command.Account));
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
-            Utils::gLogger->Log->info("RiskJudgeWidget::InitControlPannel UpdateRiskLimit Colo:{} Account:{} Command:{}", 
-                                        message.Command.Colo, message.Command.Account, message.Command.Command);
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::InitControlPannel UpdateRiskLimit Colo:{} Account:{} Command:{}", 
+                    message.Command.Colo, message.Command.Account, message.Command.Command);
         });
 
         limitGroup->setLayout(vLayout);
@@ -241,8 +240,8 @@ void RiskJudgeWidget::InitControlPannel()
             strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
-            Utils::gLogger->Log->info("RiskJudgeWidget::InitControlPannel UpdateRiskAccountLocked Colo:{} Account:{} Command:{}", 
-                                        message.Command.Colo, message.Command.Account, message.Command.Command);
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::InitControlPannel UpdateRiskAccountLocked Colo:{} Account:{} Command:{}", 
+                    message.Command.Colo, message.Command.Account, message.Command.Command);
         });
 
         accountLockedGroup->setLayout(vLayout);
@@ -346,9 +345,9 @@ void RiskJudgeWidget::InitRiskEventTableView()
 
 void RiskJudgeWidget::HandleRiskReport(const Message::PackMessage& report)
 {
-    Utils::gLogger->Log->info("RiskJudgeWidget::HandleRiskReport ReportType:{} Colo:{} Broker:{} Product:{} Account:{} Ticker:{} RiskID:{}", 
-                        report.RiskReport.ReportType, report.RiskReport.Colo, report.RiskReport.Broker, report.RiskReport.Product,
-                        report.RiskReport.Account, report.RiskReport.Ticker, report.RiskReport.RiskID);
+    FMTLOG(fmtlog::INF, "RiskJudgeWidget::HandleRiskReport ReportType:{} Colo:{} Broker:{} Product:{} Account:{} Ticker:{} RiskID:{}", 
+            report.RiskReport.ReportType, report.RiskReport.Colo, report.RiskReport.Broker, report.RiskReport.Product,
+            report.RiskReport.Account, report.RiskReport.Ticker, report.RiskReport.RiskID);
     switch(report.RiskReport.ReportType)
     {
     case Message::ERiskReportType::ERISK_TICKER_CANCELLED:
@@ -489,8 +488,8 @@ void RiskJudgeWidget::UpdateRiskLimitTable(const Message::PackMessage& report)
     Message::TRiskReport& riskLimit = m_RiskLimitReportMap[report.RiskReport.RiskID];
     riskLimit = report.RiskReport;
     emit UpdateRiskLimit(riskLimit);
-    Utils::gLogger->Log->info("RiskJudgeWidget::UpdateRiskLimitTable RiskID:{} FlowLimit:{} TickerCancelLimit:{} OrderCancelLimit:{}", 
-                                        riskLimit.RiskID, riskLimit.FlowLimit, riskLimit.TickerCancelLimit, riskLimit.OrderCancelLimit);
+    FMTLOG(fmtlog::INF, "RiskJudgeWidget::UpdateRiskLimitTable RiskID:{} FlowLimit:{} TickerCancelLimit:{} OrderCancelLimit:{}", 
+            riskLimit.RiskID, riskLimit.FlowLimit, riskLimit.TickerCancelLimit, riskLimit.OrderCancelLimit);
 }
 
 void RiskJudgeWidget::UpdateRiskEventTable(const Message::PackMessage& report)
@@ -512,9 +511,9 @@ void RiskJudgeWidget::UpdateRiskEventTable(const Message::PackMessage& report)
     FinTechUI::XTableModel::setRowBackgroundColor(ModelRow, GetRiskReportColor(report.RiskReport));
 
     m_RiskEventTableModel->appendRow(ModelRow);
-    QMessageBox::warning(this, "Risk Warning", report.RiskReport.Event);
-    Utils::gLogger->Log->info("RiskJudgeWidget::UpdateRiskEventTable RiskID:{} Account:{} Ticker:{} Event:{}", 
-                                report.RiskReport.RiskID, report.RiskReport.Account, report.RiskReport.Ticker, report.RiskReport.Event);
+    // QMessageBox::warning(this, "Risk Warning", report.RiskReport.Event);
+    FMTLOG(fmtlog::INF, "RiskJudgeWidget::UpdateRiskEventTable RiskID:{} Account:{} Ticker:{} Event:{}", 
+            report.RiskReport.RiskID, report.RiskReport.Account, report.RiskReport.Ticker, report.RiskReport.Event);
 }
 
 void RiskJudgeWidget::timerEvent(QTimerEvent *event)

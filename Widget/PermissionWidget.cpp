@@ -1,6 +1,5 @@
 #include "PermissionWidget.h"
 
-extern Utils::Logger *gLogger;
 
 
 PermissionWidget::PermissionWidget(QWidget *parent): FinTechUI::TabPageWidget(parent)
@@ -256,7 +255,7 @@ void PermissionWidget::OnUpdateUserPermission(const QModelIndex &index)
             message.Command.CmdType = Message::ECommandType::EUPDATE_USERPERMISSION;
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
-            Utils::gLogger->Log->info("PermissionWidget::OnUpdateUserPermission Command:{}", message.Command.Command);
+            FMTLOG(fmtlog::INF, "PermissionWidget::OnUpdateUserPermission Command:{}", message.Command.Command);
         }
     }
     else if(index.column() == 5)
@@ -339,7 +338,7 @@ void PermissionWidget::OnUpdateUserPermission(const QModelIndex &index)
             message.Command.CmdType = Message::ECommandType::EUPDATE_USERPERMISSION;
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
-            Utils::gLogger->Log->info("PermissionWidget::OnUpdateUserPermission Command:{}", message.Command.Command);
+            FMTLOG(fmtlog::INF, "PermissionWidget::OnUpdateUserPermission Command:{}", message.Command.Command);
         }
     }
 }

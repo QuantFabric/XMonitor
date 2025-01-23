@@ -1,6 +1,5 @@
 #include "MainWindow.h"
 
-extern Utils::Logger *gLogger;
 
 MainWindow::MainWindow(const std::string& configPath, QWidget *parent): QWidget(parent)
 {
@@ -8,11 +7,11 @@ MainWindow::MainWindow(const std::string& configPath, QWidget *parent): QWidget(
     std::string errorString;
     if(Utils::LoadXMonitorConfig(configPath.c_str(), m_XMonitorConfig, errorString))
     {
-        Utils::gLogger->Log->info("LoadXMonitorConfig successed, XServerIP:{} XServerPort:{} ", m_XMonitorConfig.XServerIP, m_XMonitorConfig.XServerPort);
+        FMTLOG(fmtlog::INF, "LoadXMonitorConfig successed, XServerIP:{} XServerPort:{} ", m_XMonitorConfig.XServerIP, m_XMonitorConfig.XServerPort);
     }
     else
     {
-        Utils::gLogger->Log->error("LoadXMonitorConfig failed, XServerIP:{} XServerPort:{} {}", m_XMonitorConfig.XServerIP, m_XMonitorConfig.XServerPort, errorString);
+        FMTLOG(fmtlog::ERR, "LoadXMonitorConfig failed, XServerIP:{} XServerPort:{} {}", m_XMonitorConfig.XServerIP, m_XMonitorConfig.XServerPort, errorString);
     }
     m_UserName = m_XMonitorConfig.UserName.c_str();
     m_PassWord = m_XMonitorConfig.PassWord.c_str();
@@ -125,8 +124,8 @@ void MainWindow::OnReceivedLoginResponse(const Message::PackMessage& msg)
     {
         m_PermissionWidget->UpdateUserPermissionTable(msg);
     }
-    Utils::gLogger->Log->info("MainWindow::OnReceivedLoginResponse Account:{} Role:{} Plugins:{} Messages:{} Operation:{}", 
-                                msg.LoginResponse.Account, msg.LoginResponse.Role, msg.LoginResponse.Plugins, msg.LoginResponse.Messages, msg.LoginResponse.Operation);
+    FMTLOG(fmtlog::INF, "MainWindow::OnReceivedLoginResponse Account:{} Role:{} Plugins:{} Messages:{} Operation:{}", 
+            msg.LoginResponse.Account, msg.LoginResponse.Role, msg.LoginResponse.Plugins, msg.LoginResponse.Messages, msg.LoginResponse.Operation);
 }
 
 MainWindow::~MainWindow()

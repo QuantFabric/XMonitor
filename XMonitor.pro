@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-CONFIG += c++11 debug
+CONFIG += c++17 debug
 
 CurrentProjectPath = $$system(pwd)
 
@@ -14,15 +14,15 @@ LIBS += "$$CurrentProjectPath/../XAPI/HP-Socket/5.8.2/lib/libhpsocket4c.a"
 # YAML-CPP
 INCLUDEPATH += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.8.0/include/"
 LIBS += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.8.0/lib/libyaml-cpp.a"
-# SPDLog
-INCLUDEPATH += "$$CurrentProjectPath/../XAPI/SPDLog/1.8.5/include/"
-LIBS += "$$CurrentProjectPath/../XAPI/SPDLog/1.8.5/lib/libspdlog.a"
+# FMTLogger
+INCLUDEPATH += "$$CurrentProjectPath/../XAPI/FMTLogger/include/"
+LIBS += "$$CurrentProjectPath/../XAPI/FMTLogger/lib/libfmtlog.a"
+LIBS += "$$CurrentProjectPath/../XAPI/FMTLogger/lib/libfmt.a"
 
 SOURCES += \
     main.cpp \
     MainWindow.cpp \
     HPPackClient.cpp \
-    $$CurrentProjectPath/../Utils/Logger.cpp \
     Widget/PermissionWidget.cpp \
     FinTechUI/QCustomPlot/qcustomplot.cpp \
     Widget/MarketWidget.cpp \
@@ -51,7 +51,7 @@ HEADERS += \
     MainWindow.h \
     PackMessage.hpp \
     HPPackClient.h \
-    Logger.h \
+    $$CurrentProjectPath/../XAPI/FMTLogger/include/FMTLogger.hpp \
     Widget/PermissionWidget.h \
     Widget/MarketWidget.h \
     Widget/EventLogWidget.h \
@@ -68,6 +68,9 @@ else {
     DEFINES += APP_COMMIT_ID=\\\"'$(shell git rev-parse HEAD)'\\\"
     DEFINES += APP_BRANCH_NAME=\\\"'$(shell git symbolic-ref --short -q HEAD)'\\\"
 }
+DEFINES += FMT_HEADER_ONLY
+DEFINES += FMTLOG_HEADER_ONLY
+DEFINES += GLIBCXX_USE_CXX11_ABI=0
 
 TEMPLATE = app
-TARGET = XMonitor_0.9.0
+TARGET = XMonitor_0.9.1

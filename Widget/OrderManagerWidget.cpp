@@ -1,5 +1,5 @@
 #include "OrderManagerWidget.h"
-extern Utils::Logger *gLogger;
+
 
 OrderManagerWidget::OrderManagerWidget(QWidget *parent) : FinTechUI::TabPageWidget(parent)
 {   
@@ -253,8 +253,8 @@ void OrderManagerWidget::OnSendOrder()
         message.OrderRequest.Volume = volumeEdit->text().toInt();
         QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss.zzz") + "000";
         strncpy(message.OrderRequest.SendTime, currentTime.toStdString().c_str(), sizeof(message.OrderRequest.SendTime));
-        Utils::gLogger->Log->info("OrderManagerWidget::OnSendOrder Colo:{} Account:{} Ticker:{} Price:{} Volume:{}", 
-                                    message.OrderRequest.Colo, message.OrderRequest.Account, message.OrderRequest.Ticker, message.OrderRequest.Price, message.OrderRequest.Volume);
+        FMTLOG(fmtlog::INF, "OrderManagerWidget::OnSendOrder Colo:{} Account:{} Ticker:{} Price:{} Volume:{}", 
+                message.OrderRequest.Colo, message.OrderRequest.Account, message.OrderRequest.Ticker, message.OrderRequest.Price, message.OrderRequest.Volume);
         int n = countEdit->text().toInt();
         for (int i = 0; i < n; i++)
         {
@@ -368,8 +368,8 @@ void OrderManagerWidget::OnTransferFund()
         strncpy(message.Command.Colo, Colo.toStdString().c_str(), sizeof(message.Command.Colo));
         int Amount = AmountEdit->text().toInt();
         sprintf( message.Command.Command, "Amount:%d", Amount);
-        Utils::gLogger->Log->info("OrderManagerWidget::OnTransferFund Colo:{} Account:{} CmdType:{} Command:{}", 
-                                    message.Command.Colo, message.Command.Account, message.Command.CmdType, message.Command.Command);
+        FMTLOG(fmtlog::INF, "OrderManagerWidget::OnTransferFund Colo:{} Account:{} CmdType:{} Command:{}", 
+                message.Command.Colo, message.Command.Account, message.Command.CmdType, message.Command.Command);
         HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
     }
 }
@@ -416,8 +416,8 @@ void OrderManagerWidget::OnRepayMargin()
         strncpy(message.Command.Colo, Colo.toStdString().c_str(), sizeof(message.Command.Colo));
         int Amount = AmountEdit->text().toInt();
         sprintf( message.Command.Command, "Amount:%d", Amount);
-        Utils::gLogger->Log->info("OrderManagerWidget::OnRepayMargin Colo:{} Account:{} Command:{}", 
-                                    message.Command.Colo, message.Command.Account, message.Command.Command);
+        FMTLOG(fmtlog::INF, "OrderManagerWidget::OnRepayMargin Colo:{} Account:{} Command:{}", 
+                message.Command.Colo, message.Command.Account, message.Command.Command);
         HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
     } 
 }
@@ -1280,8 +1280,8 @@ void OrderManagerWidget::CancelOrderDialog(const QString& account, const QString
         memcpy(message.ActionRequest.Account, Account.toStdString().c_str(), sizeof(message.ActionRequest.Account));
         memcpy(message.ActionRequest.OrderRef, OrderRef.toStdString().c_str(), sizeof(message.ActionRequest.OrderRef));
         HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
-        Utils::gLogger->Log->info("OrderManagerWidget::CancelOrderDialog Colo:{} Account:{} OrderRef:{} RiskStatus:{}", 
-                                  message.ActionRequest.Colo, message.ActionRequest.Account, message.ActionRequest.OrderRef, message.ActionRequest.RiskStatus);
+        FMTLOG(fmtlog::INF, "OrderManagerWidget::CancelOrderDialog Colo:{} Account:{} OrderRef:{} RiskStatus:{}", 
+                message.ActionRequest.Colo, message.ActionRequest.Account, message.ActionRequest.OrderRef, message.ActionRequest.RiskStatus);
     }
 }
 
@@ -1307,7 +1307,7 @@ void OrderManagerWidget::ExportTable(FinTechUI::XTableModel* tableModel, const Q
             }
         }
         file.close();
-        Utils::gLogger->Log->info("OrderManagerWidget::ExportTable {}", path.toStdString());
+        FMTLOG(fmtlog::INF, "OrderManagerWidget::ExportTable {}", path.toStdString());
         QMessageBox::information(this, "Export Order", QString("Export Order to %1").arg(filePath));
     }
 }

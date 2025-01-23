@@ -16,7 +16,7 @@
 #include <QDebug>
 #include <string.h>
 #include <QHBoxLayout>
-#include "Logger.h"
+#include "FMTLogger.hpp"
 #include "PackMessage.hpp"
 #include "FinTechUI/DragTabWidget/TabPageWidget.hpp"
 #include "FinTechUI/Model/XHeaderView.hpp"

@@ -28,7 +28,7 @@
 #include <QSet>
 #include <QColor>
 #include <QTableWidgetItem>
-#include "Logger.h"
+#include "FMTLogger.hpp"
 #include "PackMessage.hpp"
 #include "FinTechUI/DragTabWidget/TabPageWidget.hpp"
 #include "FinTechUI/Model/XTableModel.hpp"

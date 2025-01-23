@@ -5,7 +5,6 @@ bool HPPackClient::m_IsConnected = false;
 int HPPackClient::m_UUID = 0;
 
 HP_Client HPPackClient::hpClient;
-extern Utils::Logger* gLogger;
 
 HPPackClient::HPPackClient(const char *ip, unsigned int port, const char* UserName, const char* PassWord)
 {
@@ -54,11 +53,12 @@ void HPPackClient::ConnectServer()
     if (::HP_Client_Start(m_pClient, (LPCTSTR)m_ServerIP.c_str(), m_ServerPort, false))
     {
         Login(m_UserName.toStdString().c_str(), m_PassWord.toStdString().c_str());
-        Utils::gLogger->Log->info("HPPackClient::ConnectServer Client connect to server[{}:{}] successfully", m_ServerIP, m_ServerPort);
+        FMTLOG(fmtlog::INF, "HPPackClient::ConnectServer Client connect to server[{}:{}] successfully", m_ServerIP, m_ServerPort);
     }
     else
     {
-        Utils::gLogger->Log->error("HPPackClient::ConnectServer Client connect to server[{}:{}] failed, error code:{} error massage:{}", m_ServerIP, m_ServerPort, HP_Client_GetLastError(m_pClient), (char*)HP_Client_GetLastErrorDesc(m_pClient));
+        FMTLOG(fmtlog::ERR, "HPPackClient::ConnectServer Client connect to server[{}:{}] failed, error code:{} error massage:{}", 
+                m_ServerIP, m_ServerPort, HP_Client_GetLastError(m_pClient), (char*)HP_Client_GetLastErrorDesc(m_pClient));
         return;
     }
     QThread::msleep(1000);
@@ -220,7 +220,7 @@ void HPPackClient::SendData(const unsigned char *pBuffer, int iLength)
     bool ret = ::HP_Client_Send(hpClient, pBuffer, iLength);
     if(!ret)
     {
-        Utils::gLogger->Log->warn("HPPackClient::SendData failed {} {} {}", ::HP_Client_GetLastError(hpClient), ::HP_Client_GetLastErrorDesc(hpClient), SYS_GetLastError());
+        FMTLOG(fmtlog::WRN, "HPPackClient::SendData failed {} {} {}", ::HP_Client_GetLastError(hpClient), ::HP_Client_GetLastErrorDesc(hpClient), SYS_GetLastError());
     }
 }
 
@@ -237,7 +237,7 @@ En_HP_HandleResult __stdcall HPPackClient::OnConnect(HP_Client pSender, HP_CONNI
     int iAddressLen = sizeof(szAddress) / sizeof(TCHAR);
     USHORT usPort;
     ::HP_Client_GetLocalAddress(pSender, szAddress, &iAddressLen, &usPort);
-    Utils::gLogger->Log->info("HPPackClient::OnConnect new connection:{}:{} connID:{}", szAddress, usPort, dwConnID);
+    FMTLOG(fmtlog::INF, "HPPackClient::OnConnect new connection:{}:{} connID:{}", szAddress, usPort, dwConnID);
     hpClient = pSender;
     m_IsConnected = true;
     m_UUID = usPort;
@@ -254,9 +254,7 @@ En_HP_HandleResult __stdcall HPPackClient::OnReceive(HP_Client pSender, HP_CONNI
     Message::PackMessage message;
     memcpy(&message, pData, sizeof(message));
     while(!m_PackMessageQueue.Push(message));
-    char buffer[256] = {0};
-    sprintf(buffer, "0X%X", message.MessageType);
-    Utils::gLogger->Log->debug("HPPackClient::OnReceive MessageType:{}", buffer);
+    FMTLOG(fmtlog::DBG, "HPPackClient::OnReceive MessageType:{:#X}", message.MessageType);
     return HR_OK;
 }
 
@@ -266,7 +264,7 @@ En_HP_HandleResult __stdcall HPPackClient::OnClose(HP_Client pSender, HP_CONNID 
     int iAddressLen = sizeof(szAddress) / sizeof(TCHAR);
     USHORT usPort;
     ::HP_Client_GetLocalAddress(pSender, szAddress, &iAddressLen, &usPort);
-    Utils::gLogger->Log->info("HPPackClient::OnClose connection:{}:{} closed, connID:{}", szAddress, usPort, dwConnID);
+    FMTLOG(fmtlog::WRN, "HPPackClient::OnClose connection:{}:{} closed, connID:{}", szAddress, usPort, dwConnID);
     m_IsConnected = false;
     return HR_OK;
 }

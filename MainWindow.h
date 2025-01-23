@@ -14,7 +14,7 @@
 #include <QDesktopWidget>
 #include "PackMessage.hpp"
 #include "YMLConfig.hpp"
-#include "Logger.h"
+#include "FMTLogger.hpp"
 #include "FinTechUI/DragTabWidget/DragTabWidget.hpp"
 #include "HPPackClient.h"
 #include "Widget/PermissionWidget.h"
