@@ -47,6 +47,8 @@ signals:
     void ReceivedLoginResponse(const Message::PackMessage&);
     void ReceivedAppReport(const QList<Message::PackMessage>&);
     void UpdateRiskIDAccounts(const QMap<QString, QStringList>&);
+    void ReceivedFutureOrderStatus(const QList<Message::PackMessage>&);
+    void ReceivedStockOrderStatus(const QList<Message::PackMessage>&);
 protected slots:
     void WorkFunc();
 protected:

@@ -1,0 +1,11 @@
+StrategyList:
+  -
+    EngineID: 1
+    Strategy: SMAStrategy
+
+  -
+    EngineID: 2
+    Strategy: MACDStrategy
+
+
+  

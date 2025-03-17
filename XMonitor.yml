@@ -3,4 +3,4 @@ XMonitorConfig:
   XServerPort: 8000
   UserName: admin
   PassWord: 123456
-  
+  StrategyPropertyPath: /home/xtrader/XTest/XMonitor/Strategy.yml

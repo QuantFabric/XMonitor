@@ -30,6 +30,8 @@ SOURCES += \
     Widget/RiskJudgeWidget.cpp \
     Widget/MonitorWidget.cpp \
     Widget/OrderManagerWidget.cpp \
+    Widget/FuturePosWidget.cpp \
+    Widget/StockPosWidget.cpp \
 
 HEADERS += \
     FinTechUI/DragTabWidget/DragTabBar.hpp \
@@ -58,6 +60,8 @@ HEADERS += \
     Widget/RiskJudgeWidget.h \
     Widget/MonitorWidget.h \
     Widget/OrderManagerWidget.h \
+    Widget/FuturePosWidget.h \
+    Widget/StockPosWidget.h \
 
 
 win32 {
@@ -73,4 +77,4 @@ DEFINES += FMTLOG_HEADER_ONLY
 DEFINES += GLIBCXX_USE_CXX11_ABI=0
 
 TEMPLATE = app
-TARGET = XMonitor_0.9.1
+TARGET = XMonitor_0.9.2

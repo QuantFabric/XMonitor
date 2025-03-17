@@ -92,6 +92,35 @@ void MainWindow::LoadPlugins()
             SLOT(OnReceivedAppReport(const QList<Message::PackMessage>&)));
     }
 
+    std::unordered_map<int, std::string> StrategyPropertyMap;
+    std::string errorString;
+    bool ok = Utils::LoadStrategyProperty(m_XMonitorConfig.StrategyPropertyPath.c_str(), StrategyPropertyMap, errorString);
+    if(!ok)
+    {
+        FMTLOG(fmtlog::ERR, "MainWindow::LoadPlugins StrategyPropertyPath:{} errorString:{}", 
+                m_XMonitorConfig.StrategyPropertyPath, errorString);
+    }
+
+    if(m_Plugins.contains(PLUGIN_FUTUREANALYSIS))
+    {
+        m_FuturePosWidget = new FuturePosWidget(StrategyPropertyMap);
+        m_TabWidget->addTabPage(m_FuturePosWidget, PLUGIN_FUTUREANALYSIS);
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedFutureOrderStatus(const QList<Message::PackMessage>&)),
+            m_FuturePosWidget,
+            SLOT(OnReceivedOrderStatus(const QList<Message::PackMessage>&)));
+    }
+
+    if(m_Plugins.contains(PLUGIN_STOCKANALYSIS))
+    {
+        m_StockPosWidget = new StockPosWidget(StrategyPropertyMap);
+        m_TabWidget->addTabPage(m_StockPosWidget, PLUGIN_STOCKANALYSIS);
+        connect(m_HPPackClient,
+            SIGNAL(ReceivedStockOrderStatus(const QList<Message::PackMessage>&)),
+            m_StockPosWidget,
+            SLOT(OnReceivedOrderStatus(const QList<Message::PackMessage>&)));
+    }
+
     if(m_Plugins.contains(PLUGIN_ORDERMANAGER))
     {
         m_OrderManagerWidget = new OrderManagerWidget();

@@ -197,7 +197,7 @@ void MarketWidget::AppendRow(QString Colo, const MarketData::TFutureMarketData& 
     ModelRow->push_back(TickItem);
     char buffer[32] = {0};
     sprintf(buffer, "%s.%03d000", data.UpdateTime, data.MillSec);
-    FinTechUI::XTableModelItem* MarketTimeItem = new FinTechUI::XTableModelItem(buffer + 11);
+    FinTechUI::XTableModelItem* MarketTimeItem = new FinTechUI::XTableModelItem(buffer);
     ModelRow->push_back(MarketTimeItem);
     sprintf(buffer, "%.3f", data.LastPrice);
     FinTechUI::XTableModelItem* LastPricetem = new FinTechUI::XTableModelItem(buffer, Qt::AlignRight | Qt::AlignVCenter);
@@ -285,7 +285,7 @@ void MarketWidget::UpdateRow(QString Colo, const MarketData::TFutureMarketData& 
     (*ModelRow)[3]->setText(data.Tick);
     char buffer[32] = {0};
     sprintf(buffer, "%s.%03d000", data.UpdateTime, data.MillSec);
-    (*ModelRow)[4]->setText(buffer + 11);
+    (*ModelRow)[4]->setText(buffer);
     sprintf(buffer, "%.3f", data.LastPrice);
     (*ModelRow)[5]->setText(buffer);
     (*ModelRow)[6]->setText(data.Volume);

@@ -245,7 +245,7 @@ void OrderManagerWidget::OnSendOrder()
         {
             message.OrderRequest.RiskStatus = Message::ERiskStatusType::ENOCHECKED;
         }
-        if(engineCombo->currentText() == "TraderOder")
+        if(engineCombo->currentText() == "TraderOrder")
         {
             message.OrderRequest.EngineID = Message::EEngineType::ETRADER_ORDER;
         }
@@ -1109,8 +1109,7 @@ void OrderManagerWidget::AppendRow(const Message::TOrderStatus& OrderStatus, Fin
     ModelRow->push_back(OrderSideItem);
     FinTechUI::XTableModelItem* OrderTypeItem = new FinTechUI::XTableModelItem(GetOrderType(OrderStatus.OrderType));
     ModelRow->push_back(OrderTypeItem);
-    sprintf(buffer, "0X%X", OrderStatus.EngineID);
-    FinTechUI::XTableModelItem* EngineIDItem = new FinTechUI::XTableModelItem(buffer);
+    FinTechUI::XTableModelItem* EngineIDItem = new FinTechUI::XTableModelItem(OrderStatus.EngineID);
     ModelRow->push_back(EngineIDItem);
     FinTechUI::XTableModelItem* OrderRefItem = new FinTechUI::XTableModelItem(OrderStatus.OrderRef);
     ModelRow->push_back(OrderRefItem);

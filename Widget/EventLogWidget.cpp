@@ -10,7 +10,7 @@ EventLogWidget::EventLogWidget(QWidget *parent) : FinTechUI::TabPageWidget(paren
     filter << "Colo" <<  "App" << "Account" << "Ticker";
     m_FilterWidget->SetHeaderLabels(filter);
     m_FilterWidget->SetColumnWidth("Colo", 70);
-    m_FilterWidget->SetColumnWidth("App", 80);
+    m_FilterWidget->SetColumnWidth("App", 120);
     m_FilterWidget->SetColumnWidth("Account", 90);
     m_FilterWidget->SetColumnWidth("Ticker", 90);
     m_LeftWidget->setMinimumWidth(200);
@@ -36,7 +36,7 @@ EventLogWidget::EventLogWidget(QWidget *parent) : FinTechUI::TabPageWidget(paren
     m_EventLogTableView->sortByColumn(6, Qt::DescendingOrder);
     int column = 0;
     m_EventLogTableView->setColumnWidth(column++, 80);
-    m_EventLogTableView->setColumnWidth(column++, 80);
+    m_EventLogTableView->setColumnWidth(column++, 120);
     m_EventLogTableView->setColumnWidth(column++, 70);
     m_EventLogTableView->setColumnWidth(column++, 80);
     m_EventLogTableView->setColumnWidth(column++, 90);

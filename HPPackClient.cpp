@@ -102,6 +102,8 @@ void HPPackClient::WorkFunc()
         QList<Message::PackMessage> ExecuteReportList;
         QList<Message::PackMessage> RiskReportList;
         QList<Message::PackMessage> AppReportList;
+        QList<Message::PackMessage> FutureOrderStatusList;
+        QList<Message::PackMessage> StockOrderStatusList;
         Message::PackMessage msg;
         while(m_PackMessageQueue.Pop(msg))
         {
@@ -147,6 +149,16 @@ void HPPackClient::WorkFunc()
                 {
                     Accounts.append(Account);
                     emit UpdateRiskIDAccounts(m_RiskIDAccountsMap);
+                }
+
+                if(Message::EBusinessType::EFUTURE == msg.OrderStatus.BusinessType && msg.OrderStatus.EngineID > 0)
+                {
+                    FutureOrderStatusList.append(msg);
+                }
+                if((Message::EBusinessType::ESTOCK == msg.OrderStatus.BusinessType || Message::EBusinessType::ECREDIT == msg.OrderStatus.BusinessType)
+                    && msg.OrderStatus.EngineID > 0)
+                {
+                    StockOrderStatusList.append(msg);
                 }
             }
             else if(msg.MessageType == Message::EMessageType::ERiskReport)
@@ -202,6 +214,15 @@ void HPPackClient::WorkFunc()
         {
             emit ReceivedStockData(StockDataList);
         }
+        if(FutureOrderStatusList.size() > 0)
+        {
+            emit ReceivedFutureOrderStatus(FutureOrderStatusList);
+        }
+        if(StockOrderStatusList.size() > 0)
+        {
+            emit ReceivedStockOrderStatus(StockOrderStatusList);
+        }
+        
         QThread::msleep(1);
     }
 }
