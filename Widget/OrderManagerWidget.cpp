@@ -1294,7 +1294,7 @@ void OrderManagerWidget::ExportTable(FinTechUI::XTableModel* tableModel, const Q
         QFile file(filePath);
         if (file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
         {
-            file.write((headers.join(",") + "\n").toStdString().c_str());
+            file.write((headers.join("|") + "\n").toStdString().c_str());
             for(int j = 0; j < tableModel->rowCount(); j++)
             {
                 QStringList LineItems;
@@ -1302,7 +1302,7 @@ void OrderManagerWidget::ExportTable(FinTechUI::XTableModel* tableModel, const Q
                 {
                     LineItems << QString("\'") + tableModel->itemText(j, k).trimmed() + QString("\'");
                 }
-                file.write((LineItems.join(",") + "\n").toStdString().c_str());
+                file.write((LineItems.join("|") + "\n").toStdString().c_str());
             }
         }
         file.close();
