@@ -187,16 +187,10 @@ static QString GetOrderStatus(int status)
         buffer = QString::fromUtf8("风控拒单");
         break;
     case Message::EOrderStatusType::ERISK_ACTION_REJECTED:
-        buffer = QString::fromUtf8("风控拒绝撤单");
+        buffer = QString::fromUtf8("风控撤单拒单");
         break;
     case Message::EOrderStatusType::ERISK_CHECK_INIT:
         buffer = QString::fromUtf8("初始化检查");
-        break;
-    case Message::EOrderStatusType::ERISK_CHECK_SELFMATCH:
-        buffer = QString::fromUtf8("风控自成交");
-        break;
-    case Message::EOrderStatusType::ERISK_CHECK_CANCELLIMIT:
-        buffer = QString::fromUtf8("风控撤单限制");
         break;
     default:
         buffer = QString::fromUtf8("Unkown");
@@ -282,16 +276,6 @@ static QColor GetOrderStatusColor(const Message::TOrderStatus& OrderStatus)
         color = QColor("#FF4500");
     }
     else if(Message::EOrderStatusType::ERISK_ACTION_REJECTED == OrderStatus.OrderStatus)
-    {
-        // ERiskCancelRejected 橙红色 #FF4500
-        color = QColor("#FF4500");
-    }
-    else if(Message::EOrderStatusType::ERISK_CHECK_SELFMATCH == OrderStatus.OrderStatus)
-    {
-        // ERiskCancelRejected 橙红色 #FF4500
-        color = QColor("#FF4500");
-    }
-    else if(Message::EOrderStatusType::ERISK_CHECK_CANCELLIMIT == OrderStatus.OrderStatus)
     {
         // ERiskCancelRejected 橙红色 #FF4500
         color = QColor("#FF4500");
@@ -414,6 +398,9 @@ private:
     QWidget* m_LeftWidget;
     FinTechUI::FilterWidget* m_FilterWidget;
     QWidget* m_ControlPannelWidget;
+    QLabel* m_OrderLabel;
+    QLabel* m_CancelLabel;
+    QLabel* m_ErrorLabel;
 
     FinTechUI::FrozenTableView* m_StockTickerPositionTableView;
     FinTechUI::XTableModel* m_StockTickerPositionTableModel;

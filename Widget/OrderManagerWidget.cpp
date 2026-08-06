@@ -112,20 +112,38 @@ void OrderManagerWidget::OnSendOrder()
     formLayout->addRow("Exchange: ", ExchangeCombo);
 
     QComboBox* orderTypeCombo = new QComboBox;
-    orderTypeCombo->addItems(QStringList() << "FAK" << "FOK" << "LIMIT");
+    orderTypeCombo->addItem("FAK", Message::EOrderType::EFAK);
+    orderTypeCombo->addItem("FOK", Message::EOrderType::EFOK);
+    orderTypeCombo->addItem("LIMIT", Message::EOrderType::ELIMIT);
     formLayout->addRow("OrderType: ", orderTypeCombo);
 
     QComboBox* directionCombo = new QComboBox;
-    directionCombo->addItems(QStringList() << "Buy" << "Sell" << "ReverseRepo" << "Subscription" << "Allotment" 
-                                           << "CollateralTransferIn" << "CollateralTransferOut" << "MarginBuy" << "RepayMarginBySell"
-                                           << "ShortSell" << "RepayStockByBuy" << "RepayStockDirect");
+    directionCombo->addItem("Buy", Message::EOrderDirection::EBUY);
+    directionCombo->addItem("Sell", Message::EOrderDirection::ESELL);
+    directionCombo->addItem("ReverseRepo", Message::EOrderDirection::EREVERSE_REPO);
+    directionCombo->addItem("Subscription", Message::EOrderDirection::ESUBSCRIPTION);
+    directionCombo->addItem("Allotment", Message::EOrderDirection::EALLOTMENT);
+    directionCombo->addItem("CollateralTransferIn", Message::EOrderDirection::ECOLLATERAL_TRANSFER_IN);
+    directionCombo->addItem("CollateralTransferOut", Message::EOrderDirection::ECOLLATERAL_TRANSFER_OUT);
+    directionCombo->addItem("MarginBuy", Message::EOrderDirection::EMARGIN_BUY);
+    directionCombo->addItem("RepayMarginBySell", Message::EOrderDirection::EREPAY_MARGIN_BY_SELL);
+    directionCombo->addItem("ShortSell", Message::EOrderDirection::ESHORT_SELL);
+    directionCombo->addItem("RepayStockByBuy", Message::EOrderDirection::EREPAY_STOCK_BY_BUY);
+    directionCombo->addItem("RepayStockDirect", Message::EOrderDirection::EREPAY_STOCK_DIRECT);
     formLayout->addRow("Direction: ", directionCombo);
+
     QComboBox* offsetCombo = new QComboBox;
-    offsetCombo->addItems(QStringList() << "None" << "Open" << "Close" << "CloseToday" << "CloseYestoday");
+    offsetCombo->addItem("Open",Message::EOrderOffset::EOPEN);
+    offsetCombo->addItem("Close", Message::EOrderOffset::ECLOSE);
+    offsetCombo->addItem("CloseToday", Message::EOrderOffset::ECLOSE_TODAY);
+    offsetCombo->addItem("CloseYestoday", Message::EOrderOffset::ECLOSE_YESTODAY);
     formLayout->addRow("Offset: ", offsetCombo);
+
     QComboBox* riskCheckCombo = new QComboBox;
-    riskCheckCombo->addItems(QStringList() << "Check" << "NoCheck");
-    formLayout->addRow("RiskCheck: ", riskCheckCombo);
+    riskCheckCombo->addItem("Check", Message::ERiskStatusType::EPREPARE_CHECKED);
+    riskCheckCombo->addItem("NoCheck", Message::ERiskStatusType::ENOCHECKED);
+    formLayout->addRow("Offset: ", riskCheckCombo);
+
     QComboBox* engineCombo = new QComboBox;
     engineCombo->addItems(QStringList() << "None" << "TraderOrder");
     formLayout->addRow("Engine: ", engineCombo);
@@ -158,93 +176,11 @@ void OrderManagerWidget::OnSendOrder()
         memcpy(message.OrderRequest.Account, Account.toStdString().c_str(), sizeof(message.OrderRequest.Account));
         memcpy(message.OrderRequest.Ticker, Ticker.toStdString().c_str(), sizeof(message.OrderRequest.Ticker));
         memcpy(message.OrderRequest.ExchangeID, Exchange.toStdString().c_str(), sizeof(message.OrderRequest.ExchangeID));
-        if(orderTypeCombo->currentText() == "FAK")
-        {
-            message.OrderRequest.OrderType = Message::EOrderType::EFAK;
-        }
-        else if(orderTypeCombo->currentText() == "FOK")
-        {
-            message.OrderRequest.OrderType = Message::EOrderType::EFOK;
-        }
-        else if(orderTypeCombo->currentText() == "LIMIT")
-        {
-            message.OrderRequest.OrderType = Message::EOrderType::ELIMIT;
-        }
+        message.OrderRequest.OrderType = orderTypeCombo->currentData().toInt();
+        message.OrderRequest.Direction = directionCombo->currentData().toInt();
+        message.OrderRequest.Offset = offsetCombo->currentData().toInt();
+        message.OrderRequest.RiskStatus = riskCheckCombo->currentData().toInt();
 
-        if(directionCombo->currentText() == "Buy")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::EBUY;
-        }
-        else if(directionCombo->currentText() == "Sell")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::ESELL;
-        }
-        else if(directionCombo->currentText() == "ReverseRepo")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::EREVERSE_REPO;
-        }
-        else if(directionCombo->currentText() == "Subscription")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::ESUBSCRIPTION;
-        }
-        else if(directionCombo->currentText() == "Allotment")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::EALLOTMENT;
-        }
-        else if(directionCombo->currentText() == "CollateralTransferIn")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::ECOLLATERAL_TRANSFER_IN;
-        }
-        else if(directionCombo->currentText() == "CollateralTransferOut")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::ECOLLATERAL_TRANSFER_OUT;
-        }
-        else if(directionCombo->currentText() == "MarginBuy")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::EMARGIN_BUY;
-        }
-        else if(directionCombo->currentText() == "RepayMarginBySell")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::EREPAY_MARGIN_BY_SELL;
-        }
-        else if(directionCombo->currentText() == "ShortSell")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::ESHORT_SELL;
-        }
-        else if(directionCombo->currentText() == "RepayStockByBuy")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::EREPAY_STOCK_BY_BUY;
-        }
-        else if(directionCombo->currentText() == "RepayStockDirect")
-        {
-            message.OrderRequest.Direction = Message::EOrderDirection::EREPAY_STOCK_DIRECT;
-        }
-
-        if(offsetCombo->currentText() == "Open")
-        {
-            message.OrderRequest.Offset = Message::EOrderOffset::EOPEN;
-        }
-        else if(offsetCombo->currentText() == "Close")
-        {
-            message.OrderRequest.Offset = Message::EOrderOffset::ECLOSE;
-        }
-        else if(offsetCombo->currentText() == "CloseToday")
-        {
-            message.OrderRequest.Offset = Message::EOrderOffset::ECLOSE_TODAY;
-        }
-        else if(offsetCombo->currentText() == "CloseYestoday")
-        {
-            message.OrderRequest.Offset = Message::EOrderOffset::ECLOSE_YESTODAY;
-        }
-        
-        if(riskCheckCombo->currentText() == "Check")
-        {
-            message.OrderRequest.RiskStatus = Message::ERiskStatusType::EPREPARE_CHECKED;
-        }
-        else if(riskCheckCombo->currentText() == "NoCheck")
-        {
-            message.OrderRequest.RiskStatus = Message::ERiskStatusType::ENOCHECKED;
-        }
         if(engineCombo->currentText() == "TraderOrder")
         {
             message.OrderRequest.EngineID = Message::EEngineType::ETRADER_ORDER;
@@ -305,6 +241,30 @@ void OrderManagerWidget::OnFilterTable(const QVector<QStringList>& filter)
     FilterMap[0] = AccountFilter;
     m_AccountFundProxyModel->setRowFilter(FilterMap);
     m_AccountFundProxyModel->resetFilter();
+    // 更新历史订单统计
+    int OrderCount = m_HistoryOrderProxyModel->rowCount();
+    m_OrderLabel->setText(QString("Order: %1").arg(OrderCount));
+    int CancelCount = 0;
+    for(int i = 0; i < m_HistoryOrderProxyModel->rowCount(); ++i) 
+    {
+        QModelIndex proxyIndex = m_HistoryOrderProxyModel->index(i, 8);
+        if(proxyIndex.data().toString() == "撤单" || proxyIndex.data().toString() == "部成部撤") 
+        {
+            CancelCount += 1;
+        }
+    }   
+    m_CancelLabel->setText(QString("Cancel: %1").arg(CancelCount));
+
+    int ErrorCount = 0;
+    for(int i = 0; i < m_HistoryOrderProxyModel->rowCount(); ++i) 
+    {
+        QModelIndex proxyIndex = m_HistoryOrderProxyModel->index(i, 8);
+        if(proxyIndex.data().toString() == "柜台错误" || proxyIndex.data().toString() == "交易所错误" || proxyIndex.data().toString() == "风控拒单") 
+        {
+            ErrorCount += 1;
+        }
+    }  
+    m_ErrorLabel->setText(QString("Error: %1").arg(ErrorCount));
 }
 
 void OrderManagerWidget::OnExportOrderTable()
@@ -367,7 +327,7 @@ void OrderManagerWidget::OnTransferFund()
         strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));
         strncpy(message.Command.Colo, Colo.toStdString().c_str(), sizeof(message.Command.Colo));
         int Amount = AmountEdit->text().toInt();
-        sprintf( message.Command.Command, "Amount:%d", Amount);
+        sprintf(message.Command.Command, "Amount:%d", Amount);
         FMTLOG(fmtlog::INF, "OrderManagerWidget::OnTransferFund Colo:{} Account:{} CmdType:{} Command:{}", 
                 message.Command.Colo, message.Command.Account, message.Command.CmdType, message.Command.Command);
         HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));
@@ -436,6 +396,7 @@ void OrderManagerWidget::InitFilterWidget()
 void OrderManagerWidget::InitControlPannel()
 {
     m_ControlPannelWidget = new QWidget;
+
     QPushButton* sendOrderButton = new QPushButton("SendOrder");
     QPushButton* cancelOrderButton = new QPushButton("CancelOrder");
     QPushButton* exportOrderTableButton = new QPushButton("ExportOrder");
@@ -445,12 +406,20 @@ void OrderManagerWidget::InitControlPannel()
     buttonLayout->setContentsMargins(0, 0, 0, 0);
     buttonLayout->setHorizontalSpacing(20);
     buttonLayout->setVerticalSpacing(10);
-    buttonLayout->addWidget(sendOrderButton, 0, 0);
-    buttonLayout->addWidget(cancelOrderButton, 0, 1);
-    buttonLayout->addWidget(exportOrderTableButton, 0, 2);
-    buttonLayout->addWidget(transferFundButton, 1, 0);
-    buttonLayout->addWidget(repayMarginButton, 1, 1);
-    buttonLayout->setRowStretch(2, 1);
+
+    m_OrderLabel = new QLabel(QString("Order: 0"));
+    m_CancelLabel = new QLabel(QString("Cancel: 0"));
+    m_ErrorLabel = new QLabel(QString("Error: 0"));
+    buttonLayout->addWidget(m_OrderLabel, 0, 0);
+    buttonLayout->addWidget(m_CancelLabel, 0, 1);
+    buttonLayout->addWidget(m_ErrorLabel, 0, 2);
+
+    buttonLayout->addWidget(sendOrderButton, 1, 0);
+    buttonLayout->addWidget(cancelOrderButton, 1, 1);
+    buttonLayout->addWidget(exportOrderTableButton, 1, 2);
+    buttonLayout->addWidget(transferFundButton, 2, 0);
+    buttonLayout->addWidget(repayMarginButton, 2, 1);
+    buttonLayout->setRowStretch(3, 1);
     m_ControlPannelWidget->setLayout(buttonLayout);
 
     connect(sendOrderButton, SIGNAL(clicked(bool)), this, SLOT(OnSendOrder()));
@@ -1003,8 +972,7 @@ void OrderManagerWidget::UpdateOrderStatus(const Message::PackMessage& msg)
         Message::EOrderStatusType::EBROKER_ERROR == msg.OrderStatus.OrderStatus ||
         Message::EOrderStatusType::EEXCHANGE_ERROR == msg.OrderStatus.OrderStatus ||
         Message::EOrderStatusType::ERISK_ORDER_REJECTED == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatusType::ERISK_CHECK_INIT == msg.OrderStatus.OrderStatus ||
-        Message::EOrderStatusType::ERISK_CHECK_SELFMATCH == msg.OrderStatus.OrderStatus)
+        Message::EOrderStatusType::ERISK_CHECK_INIT == msg.OrderStatus.OrderStatus)
     {
         UpdateHistoryOrderTable(msg.OrderStatus);
     }
@@ -1036,6 +1004,7 @@ void OrderManagerWidget::UpdateOrderStatus(const Message::PackMessage& msg)
         data.append(m_AccountTickerSetMap);
         m_FilterWidget->SetDataRelationMap(data);
     }
+    FMTLOG(fmtlog::INF, "Account:{} Ticker:{} OrderStatus:{}", msg.OrderStatus.Account, msg.OrderStatus.Ticker, msg.OrderStatus.OrderStatus);
 }
 
 void OrderManagerWidget::UpdateHangingOrderTable(const Message::TOrderStatus& OrderStatus)
