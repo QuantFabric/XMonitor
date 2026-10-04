@@ -5,3 +5,22 @@
   - 提供交易组件的进程级管理，实现GUI客户端启动、停止交易组件；
   - 提供行情数据展示、订单回报管理、报单、撤单、风控管理、用户权限管理、交易进程管理等功能。
 - XMonitor客户端提供Permission、Market、EventLog、Monitor、RiskJudge、OrderManager等插件，用于展示不同监控信息。
+
+- 使用EPEL仓库安装Qt5：
+  ```bash
+  # 1. 安装dnf-plugins-core（提供 config-manager 工具）
+  sudo dnf install -y dnf-plugins-core
+  # 2. 启用 CRB 仓库
+  sudo dnf config-manager --set-enabled crb
+  # 3. 安装 EPEL 仓库
+  sudo dnf install -y epel-release
+  # 4. 安装Qt5
+  sudo dnf install -y qt5-qtbase-devel
+  sudo dnf install -y qt5-qtsvg-devel qt5-qttools-devel
+  ```
+
+- 安装X11转发进行身份验证工具：
+  ```bash
+    sudo dnf install -y xorg-x11-xauth
+    # 安装后，请务必断开当前SSH连接，然后重新登录，以使配置生效
+  ```

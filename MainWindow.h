@@ -11,7 +11,8 @@
 #include <QSettings>
 #include <QStringList>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
+#include <QGuiApplication>
 #include "PackMessage.hpp"
 #include "YMLConfig.hpp"
 #include "FMTLogger.hpp"

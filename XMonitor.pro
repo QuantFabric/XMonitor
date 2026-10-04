@@ -12,8 +12,8 @@ INCLUDEPATH += "$$CurrentProjectPath/../Utils/"
 INCLUDEPATH += "$$CurrentProjectPath/../XAPI/HP-Socket/5.8.2/include/"
 LIBS += "$$CurrentProjectPath/../XAPI/HP-Socket/5.8.2/lib/libhpsocket4c.a"
 # YAML-CPP
-INCLUDEPATH += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.8.0/include/"
-LIBS += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.8.0/lib/libyaml-cpp.a"
+INCLUDEPATH += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.9.0/include/"
+LIBS += "$$CurrentProjectPath/../XAPI/YAML-CPP/0.9.0/lib/libyaml-cpp.a"
 # FMTLogger
 INCLUDEPATH += "$$CurrentProjectPath/../XAPI/FMTLogger/include/"
 LIBS += "$$CurrentProjectPath/../XAPI/FMTLogger/lib/libfmtlog.a"
@@ -74,7 +74,7 @@ else {
 }
 DEFINES += FMT_HEADER_ONLY
 DEFINES += FMTLOG_HEADER_ONLY
-DEFINES += GLIBCXX_USE_CXX11_ABI=1
+DEFINES += GLIBCXX_USE_CXX11_ABI=0
 
 TEMPLATE = app
-TARGET = XMonitor_0.9.4
+TARGET = XMonitor_0.9.5
