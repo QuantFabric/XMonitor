@@ -10,6 +10,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+add_definitions(-DFMT_HEADER_ONLY)
+add_definitions(-DFMTLOG_HEADER_ONLY)
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+
 # 默认 Debug（与原 .pro 中 CONFIG += debug 一致）
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
@@ -155,16 +159,8 @@ if(NOT GIT_BRANCH_NAME)
     set(GIT_BRANCH_NAME "unknown")
 endif()
 
-# ---------------------------------------------------------------------------
-# 编译宏定义
-# ---------------------------------------------------------------------------
-target_compile_definitions(${PROJECT_NAME}_${AppVersion} PRIVATE
-    APP_COMMIT_ID="${GIT_COMMIT_ID}"
-    APP_BRANCH_NAME="${GIT_BRANCH_NAME}"
-    FMT_HEADER_ONLY
-    FMTLOG_HEADER_ONLY
-    GLIBCXX_USE_CXX11_ABI=0
-)
+add_definitions(-DAPP_COMMIT_ID=\"${GIT_COMMIT_ID}\") 
+add_definitions(-DAPP_BRANCH_NAME=\"${GIT_BRANCH_NAME}\")
 
 # ---------------------------------------------------------------------------
 # Linux 下额外链接（线程、dl 等，静态库常需要）
