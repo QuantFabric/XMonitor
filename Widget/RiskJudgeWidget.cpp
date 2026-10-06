@@ -181,7 +181,7 @@ void RiskJudgeWidget::OnUpdateRiskLimit(const QModelIndex &index)
             strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
-            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdateRiskLimit Colo:{} Account:{} Command:{}",                     
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdateRiskLimit Colo:{} Account:{} Update Command:{}",                     
                     message.Command.Colo, message.Command.Account, message.Command.Command);
         }
     }
@@ -201,7 +201,7 @@ void RiskJudgeWidget::OnUpdateRiskLimit(const QModelIndex &index)
             strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
-            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdateRiskLimit Colo:{} Account:{} Command:{}",                     
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdateRiskLimit Colo:{} Account:{} Delete Command:{}",                     
                     message.Command.Colo, message.Command.Account, message.Command.Command);
         }
     }
@@ -318,7 +318,7 @@ void RiskJudgeWidget::OnUpdatePositionLimit(const QModelIndex &index)
             strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
-            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Command:{}",                     
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Update Command:{}",                     
                     message.Command.Colo, message.Command.Account, message.Command.Command);
         }         
     }
@@ -339,7 +339,7 @@ void RiskJudgeWidget::OnUpdatePositionLimit(const QModelIndex &index)
             strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
-            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Command:{}",                     
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Delete Command:{}",                     
                     message.Command.Colo, message.Command.Account, message.Command.Command);
         }
     }
@@ -406,14 +406,25 @@ void RiskJudgeWidget::OnUpdateAccountLocked(const QModelIndex &index)
     formLayout->addRow("Trader: ", TraderEdit);
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox;
+    // 添加自定义按钮，并指定角色
+    QPushButton* updateButton = buttonBox->addButton(QStringLiteral("Update"),
+                                                    QDialogButtonBox::AcceptRole);
+    QPushButton* deleteButton = buttonBox->addButton(QStringLiteral("Delete"),
+                                                    QDialogButtonBox::DestructiveRole);
+    QPushButton* cancelButton = buttonBox->addButton(QStringLiteral("Cancel"),
+                                                    QDialogButtonBox::RejectRole);
     buttonBox->setCenterButtons(true);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     formLayout->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
-
+    // 连接各自的 clicked 信号
+    connect(updateButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(deleteButton, &QPushButton::clicked, &dialog, [&dialog]() {
+        dialog.done(2);   // 用自定义返回码 2 表示 Delete
+    });
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
     dialog.setLayout(formLayout);
-    if(dialog.exec() == QDialog::Accepted)
+    int ret_code = dialog.exec();
+
+    if(ret_code == QDialog::Accepted)
     {
         int BusinessType = TypeCombo->currentData().toInt();
         int lockside = LockSideCombo->currentData().toInt();
@@ -421,7 +432,7 @@ void RiskJudgeWidget::OnUpdateAccountLocked(const QModelIndex &index)
         QString command = QString::asprintf("RiskID:%s,Account:%s,Ticker:%s,BusinessType:%d,LockSide:%d,Trader:%s",                                                
                                             RiskIDEdit->text().toStdString().c_str(), AccountEdit->text().toStdString().c_str(), TickerEdit->text().toStdString().c_str(), 
                                             BusinessType, lockside, TraderEdit->text().toStdString().c_str());            
-        if(QMessageBox::Yes == QMessageBox::question(this, "Send Account Locked Command", command))
+        if(QMessageBox::Yes == QMessageBox::question(this, "Send Update Account Locked Command", command))
         {
             Message::PackMessage message;            
             message.MessageType = Message::EMessageType::ECommand;            
@@ -430,7 +441,28 @@ void RiskJudgeWidget::OnUpdateAccountLocked(const QModelIndex &index)
             strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
             HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
-            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Command:{}",                     
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Update Command:{}",                     
+                    message.Command.Colo, message.Command.Account, message.Command.Command);
+        }
+    }
+    else if(ret_code == 2)
+    {
+        int BusinessType = TypeCombo->currentData().toInt();
+        int lockside = LockSideCombo->currentData().toInt();
+
+        QString command = QString::asprintf("RiskID:%s,Account:%s,Ticker:%s,BusinessType:%d,LockSide:%d,Trader:%s",                                                
+                                            RiskIDEdit->text().toStdString().c_str(), AccountEdit->text().toStdString().c_str(), TickerEdit->text().toStdString().c_str(), 
+                                            BusinessType, lockside, TraderEdit->text().toStdString().c_str());            
+        if(QMessageBox::Yes == QMessageBox::question(this, "Send Delete Account Locked Command", command))
+        {
+            Message::PackMessage message;            
+            message.MessageType = Message::EMessageType::ECommand;            
+            message.Command.CmdType = Message::ECommandType::EDELETE_RISK_ACCOUNT_LOCKED;            
+            strncpy(message.Command.Colo, m_RiskIDColoMap[RiskID].toStdString().c_str(), sizeof(message.Command.Colo));            
+            strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
+            strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
+            HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Delete Command:{}",                     
                     message.Command.Colo, message.Command.Account, message.Command.Command);
         }
     }
