@@ -147,25 +147,56 @@ void RiskJudgeWidget::OnUpdateRiskLimit(const QModelIndex &index)
     formLayout->addRow("Trader: ", TraderEdit);
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox;
+    // 添加自定义按钮，并指定角色
+    QPushButton* updateButton = buttonBox->addButton(QStringLiteral("Update"),
+                                                    QDialogButtonBox::AcceptRole);
+    QPushButton* deleteButton = buttonBox->addButton(QStringLiteral("Delete"),
+                                                    QDialogButtonBox::DestructiveRole);
+    QPushButton* cancelButton = buttonBox->addButton(QStringLiteral("Cancel"),
+                                                    QDialogButtonBox::RejectRole);
     buttonBox->setCenterButtons(true);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     formLayout->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
-
+    // 连接各自的 clicked 信号
+    connect(updateButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(deleteButton, &QPushButton::clicked, &dialog, [&dialog]() {
+        dialog.done(2);   // 用自定义返回码 2 表示 Delete
+    });
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
     dialog.setLayout(formLayout);
-    if(dialog.exec() == QDialog::Accepted)
+    int ret_code = dialog.exec();
+
+    if(ret_code == QDialog::Accepted)
     {
         int BusinessType = TypeCombo->currentData().toInt();
         QString command = QString::asprintf("RiskID:%s,Account:%s,Ticker:%s,BusinessType:%d,FlowLimit:%d,CancelCount:%d,CancelLimit:%d,OrderCount:%d,OrderLimit:%d,OrderCancelLimit:%d,Trader:%s",                                                
                                             RiskIDEdit->text().toStdString().c_str(), AccountEdit->text().toStdString().c_str(), TickerEdit->text().toStdString().c_str(), BusinessType, 
                                             FlowLimitEdit->text().toInt(), CancelCountEdit->text().toInt(), CancelLimitEdit->text().toInt(), OrderCountEdit->text().toInt(), 
                                             OrderLimitEdit->text().toInt(), OrderCancelLimitEdit->text().toInt(), Trader.toStdString().c_str());            
-        if(QMessageBox::Yes == QMessageBox::question(this, "Send Risk Limit Command", command))
+        if(QMessageBox::Yes == QMessageBox::question(this, "Send Update Risk Limit Command", command))
         {
             Message::PackMessage message;            
             message.MessageType = Message::EMessageType::ECommand;            
             message.Command.CmdType = Message::ECommandType::EUPDATE_RISK_LIMIT;            
+            strncpy(message.Command.Colo, m_RiskIDColoMap[RiskID].toStdString().c_str(), sizeof(message.Command.Colo));            
+            strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
+            strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
+            HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdateRiskLimit Colo:{} Account:{} Command:{}",                     
+                    message.Command.Colo, message.Command.Account, message.Command.Command);
+        }
+    }
+    else if(ret_code == 2)
+    {
+        int BusinessType = TypeCombo->currentData().toInt();
+        QString command = QString::asprintf("RiskID:%s,Account:%s,Ticker:%s,BusinessType:%d,FlowLimit:%d,CancelCount:%d,CancelLimit:%d,OrderCount:%d,OrderLimit:%d,OrderCancelLimit:%d,Trader:%s",                                                
+                                            RiskIDEdit->text().toStdString().c_str(), AccountEdit->text().toStdString().c_str(), TickerEdit->text().toStdString().c_str(), BusinessType, 
+                                            FlowLimitEdit->text().toInt(), CancelCountEdit->text().toInt(), CancelLimitEdit->text().toInt(), OrderCountEdit->text().toInt(), 
+                                            OrderLimitEdit->text().toInt(), OrderCancelLimitEdit->text().toInt(), Trader.toStdString().c_str());            
+        if(QMessageBox::Yes == QMessageBox::question(this, "Send Delete Risk Limit Command", command))
+        {
+            Message::PackMessage message;            
+            message.MessageType = Message::EMessageType::ECommand;            
+            message.Command.CmdType = Message::ECommandType::EDELETE_RISK_LIMIT;            
             strncpy(message.Command.Colo, m_RiskIDColoMap[RiskID].toStdString().c_str(), sizeof(message.Command.Colo));            
             strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
             strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
@@ -253,14 +284,24 @@ void RiskJudgeWidget::OnUpdatePositionLimit(const QModelIndex &index)
     formLayout->addRow("Trader: ", TraderEdit);
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox;
+    // 添加自定义按钮，并指定角色
+    QPushButton* updateButton = buttonBox->addButton(QStringLiteral("Update"),
+                                                    QDialogButtonBox::AcceptRole);
+    QPushButton* deleteButton = buttonBox->addButton(QStringLiteral("Delete"),
+                                                    QDialogButtonBox::DestructiveRole);
+    QPushButton* cancelButton = buttonBox->addButton(QStringLiteral("Cancel"),
+                                                    QDialogButtonBox::RejectRole);
     buttonBox->setCenterButtons(true);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     formLayout->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()));
-
+    // 连接各自的 clicked 信号
+    connect(updateButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+    connect(deleteButton, &QPushButton::clicked, &dialog, [&dialog]() {
+        dialog.done(2);   // 用自定义返回码 2 表示 Delete
+    });
+    connect(cancelButton, &QPushButton::clicked, &dialog, &QDialog::reject);
     dialog.setLayout(formLayout);
-    if(dialog.exec() == QDialog::Accepted)
+    int ret_code = dialog.exec();
+    if(ret_code == QDialog::Accepted)
     {
         int BusinessType = TypeCombo->currentData().toInt();
         QString command = QString::asprintf("RiskID:%s,Account:%s,Ticker:%s,EngineID:%d,BusinessType:%d,LongVolume:%d,ShortVolume:%d,LongLimit:%d,ShortLimit:%d,ExLowerLimit:%d,ExUpperLimit:%d,Trader:%s",                                                
@@ -268,7 +309,7 @@ void RiskJudgeWidget::OnUpdatePositionLimit(const QModelIndex &index)
                                             EngineIDEdit->text().toInt(), BusinessType, LongVolumeEdit->text().toInt(), ShortVolumeEdit->text().toInt(), 
                                             LongLimitEdit->text().toInt(), ShortLimitEdit->text().toInt(), ExLowerLimitEdit->text().toInt(), ExUpperLimitEdit->text().toInt(),
                                             TraderEdit->text().toStdString().c_str());   
-        if(QMessageBox::Yes == QMessageBox::question(this, "Send Position Limit Command", command))
+        if(QMessageBox::Yes == QMessageBox::question(this, "Send Update Position Limit Command", command))
         {
             Message::PackMessage message;            
             message.MessageType = Message::EMessageType::ECommand;            
@@ -280,6 +321,27 @@ void RiskJudgeWidget::OnUpdatePositionLimit(const QModelIndex &index)
             FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Command:{}",                     
                     message.Command.Colo, message.Command.Account, message.Command.Command);
         }         
+    }
+    else if(ret_code == 2)
+    {
+        int BusinessType = TypeCombo->currentData().toInt();
+        QString command = QString::asprintf("RiskID:%s,Account:%s,Ticker:%s,EngineID:%d,BusinessType:%d,LongVolume:%d,ShortVolume:%d,LongLimit:%d,ShortLimit:%d,ExLowerLimit:%d,ExUpperLimit:%d,Trader:%s",                                                
+                                            RiskIDEdit->text().toStdString().c_str(), AccountEdit->text().toStdString().c_str(), TickerEdit->text().toStdString().c_str(), 
+                                            EngineIDEdit->text().toInt(), BusinessType, LongVolumeEdit->text().toInt(), ShortVolumeEdit->text().toInt(), 
+                                            LongLimitEdit->text().toInt(), ShortLimitEdit->text().toInt(), ExLowerLimitEdit->text().toInt(), ExUpperLimitEdit->text().toInt(),
+                                            TraderEdit->text().toStdString().c_str());   
+        if(QMessageBox::Yes == QMessageBox::question(this, "Send Delete Position Limit Command", command))
+        {
+            Message::PackMessage message;            
+            message.MessageType = Message::EMessageType::ECommand;            
+            message.Command.CmdType = Message::ECommandType::EDELETE_RISK_POSITION_LIMIT;            
+            strncpy(message.Command.Colo, m_RiskIDColoMap[RiskID].toStdString().c_str(), sizeof(message.Command.Colo));            
+            strncpy(message.Command.Account, Account.toStdString().c_str(), sizeof(message.Command.Account));            
+            strncpy(message.Command.Command, command.toStdString().c_str(), sizeof(message.Command.Command));            
+            HPPackClient::SendData(reinterpret_cast<unsigned char *>(&message), sizeof(message));            
+            FMTLOG(fmtlog::INF, "RiskJudgeWidget::OnUpdatePositionLimit Colo:{} Account:{} Command:{}",                     
+                    message.Command.Colo, message.Command.Account, message.Command.Command);
+        }
     }
 }
 
